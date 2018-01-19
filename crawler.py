@@ -17,4 +17,4 @@ def get_events_from_url(url):
         print('==============================')
 
 
-get_events_from_url('http://www.agendadulibre.org/events.json?utf8=%E2%9C%93&near%5Blocation%5D=&near%5Bdistance%5D=&region=&tag=&button=')
+get_events_from_url('http://www.agendadulibre.org/events.json')
