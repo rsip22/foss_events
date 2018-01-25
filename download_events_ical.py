@@ -1,5 +1,6 @@
 import icalendar
 
+
 def download_events_ical():
 
     debug('Download events: icalendar')
