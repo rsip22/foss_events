@@ -609,6 +609,9 @@ def showmenubar():
     # Weekly View
     mnu_weekview = u'<a href="%s?calaction=weekly%s" title="Weekly view">[Weekly]</a>' % (page_url, getquerystring(['caldate', 'numcal']) )
 
+    # iCalendar download
+    mnu_ical = u'<a href="%s?calaction=ical" title="icalendar download">[ical]</a>' % (page_url)
+
     html = [
         u'\r\n',
         u'<table class="eventcalendar_menubar" %s>',
@@ -624,12 +627,14 @@ def showmenubar():
         left_menu_selected.append(mnu_weekview)
         left_menu_selected.append(mnu_dayview)
         left_menu_selected.append(mnu_simpleview)
+        left_menu_selected.append(mnu_ical)
         right_menu_selected.append(mnu_upcomingview)
 
     elif cal_action == 'simple':
         left_menu_selected.append(mnu_monthview)
         left_menu_selected.append(mnu_weekview)
         left_menu_selected.append(mnu_dayview)
+        left_menu_selected.append(mnu_ical)
         right_menu_selected.append(mnu_listview)
         right_menu_selected.append(mnu_upcomingview)
         right_menu_selected.append(mnu_curmonthcal)
@@ -639,12 +644,14 @@ def showmenubar():
         left_menu_selected.append(mnu_weekview)
         left_menu_selected.append(mnu_dayview)
         left_menu_selected.append(mnu_simpleview)
+        left_menu_selected.append(mnu_ical)
         right_menu_selected.append(mnu_listview)
 
     elif cal_action == 'weekly':
         left_menu_selected.append(mnu_monthview)
         left_menu_selected.append(mnu_dayview)
         left_menu_selected.append(mnu_simpleview)
+        left_menu_selected.append(mnu_ical)
         right_menu_selected.append(mnu_upcomingview)
         right_menu_selected.append(mnu_listview)
         right_menu_selected.append(mnu_curmonthcal)
@@ -653,6 +660,7 @@ def showmenubar():
         left_menu_selected.append(mnu_monthview)
         left_menu_selected.append(mnu_weekview)
         left_menu_selected.append(mnu_simpleview)
+        left_menu_selected.append(mnu_ical)
         right_menu_selected.append(mnu_upcomingview)
         right_menu_selected.append(mnu_listview)
         right_menu_selected.append(mnu_curmonthcal)
@@ -661,6 +669,7 @@ def showmenubar():
         left_menu_selected.append(mnu_weekview)
         left_menu_selected.append(mnu_dayview)
         left_menu_selected.append(mnu_simpleview)
+        left_menu_selected.append(mnu_ical)
         right_menu_selected.append(mnu_upcomingview)
         right_menu_selected.append(mnu_listview)
         right_menu_selected.append(mnu_curmonthcal)
