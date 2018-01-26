@@ -19,3 +19,7 @@ Info for one event, from **listshow_event(event)**:
 * % showReferPageParsedForLabel(event['label'])
 * % converttext(event['description'])
 * % showReferPageParsed(event, 'refer')
+
+TODO:
+* Figure out how to link calaction=ical on the bottom menu bar. [http://localhost/MyStartingPage?calaction=ical](http://localhost/MyStartingPage?calaction=ical) works.
+* Install icalendar system-wide to import it to the EventCalendar module.

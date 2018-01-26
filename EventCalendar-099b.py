@@ -158,7 +158,7 @@ from MoinMoin import wikiutil, config, search, caching
 from MoinMoin.Page import Page
 import re, calendar, time, datetime
 import codecs, os, urllib, sha
-import icalendar
+# import icalendar
 
 try:
     import cPickle as pickle
@@ -238,7 +238,13 @@ def execute(macro, args):
     getparams(args)
 
     # allowed actions
-    allowed_action = ['monthly', 'list', 'simple', 'upcoming', 'daily', 'weekly']
+    allowed_action = ['monthly',
+                      'list',
+                      'simple',
+                      'upcoming',
+                      'daily',
+                      'weekly',
+                      'ical']
     default_action = Params.firstview
 
     # Internal variables
@@ -294,6 +300,9 @@ def execute(macro, args):
 
     if cal_action == 'weekly':
         html_result = showweeklycalendar()
+
+    if cal_action == 'ical':
+        html_result = download_events_ical()
 
 
     # format output
@@ -3373,6 +3382,16 @@ def showsimpleeventcalendar(year, month):
     html_cal_table = u'\r\n'.join(html_cal_table)
 
     return html_cal_table
+
+
+def download_events_ical():
+    """ Download future events data in icalendar format """
+    debug('Download events: icalendar')
+
+    request = Globs.request
+    formatter = Globs.formatter
+
+    return "Success!"
 
 
 def calhead_yearmonth(year, month, headclass):
