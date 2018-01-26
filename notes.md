@@ -22,4 +22,5 @@ Info for one event, from **listshow_event(event)**:
 
 TODO:
 * <del>Figure out how to link calaction=ical on the bottom menu bar. [http://localhost/MyStartingPage?calaction=ical](http://localhost/MyStartingPage?calaction=ical) works.</del> IT WORKS!
+* Figure out how to allow the download to happen. (Check other macros' code, specially EventAggregator)
 * Install icalendar system-wide to import it to the EventCalendar module.
