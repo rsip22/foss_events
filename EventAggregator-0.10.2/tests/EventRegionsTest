@@ -1,0 +1,30 @@
+{{{#!event
+ Start:: 2013-02-04
+ End:: 2013-02-04
+ Topics:: test,testing
+ Description:: An event region
+ Link:: http://moinmo.in/MacroMarket/EventAggregator
+ Location:: Oslo, Norway
+ Summary:: First region
+}}}
+
+{{{#!event
+ Start:: 2013-02-04 21:59:50
+ End:: 2013-02-04 22:00
+ Topics:: test,time
+ Description:: Another event region with time information
+ Location:: Helsinki, Finland
+ Summary:: Second region with time
+}}}
+
+{{{#!event
+ Start:: 2013-02-04 23:55
+ End:: 2013-02-05 00:05
+ Topics:: test,time,midnight
+ Description:: Another event region with times either side of midnight and explicit latitude and longitude
+ Geo:: 62:0:42 -6:46:3
+ Summary:: Third region with geo field
+}}}
+
+----
+CategoryEvents

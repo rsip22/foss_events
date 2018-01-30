@@ -1,0 +1,157 @@
+/*  event-aggregator-print.css - some additional styles for the EventAggregator macro
+                                 which can be included in print.css after...
+
+                                 @import "event-aggregator.css";
+
+                                 ...but before any rules...
+
+                                 @import "event-aggregator-print.css";
+
+Copyright (c) 2009, 2010, 2011 by Paul Boddie
+Licensed under the GNU GPL (v2 or later), see COPYING.txt for details.
+*/
+
+/* Controls. */
+
+.previous,
+.next,
+.event-controls {
+    display: none;
+}
+
+/* Calendar view. */
+
+table.event-month,
+table.event-calendar-day {
+    page-break-before: always; /* page-break-inside: avoid; not supported anywhere */
+}
+
+/* Day content. */
+
+.event-day-busy span.event-day-number {
+    border: 1px dotted #000000;
+}
+
+.event-day-starting {
+    border-left: 2px solid #000000;
+    border-top: 2px solid #000000;
+    border-bottom: 2px solid #000000;
+}
+
+.event-day-ending {
+    border-right: 2px solid #000000;
+    border-top: 2px solid #000000;
+    border-bottom: 2px solid #000000;
+}
+
+.event-day-single .event-summary,
+.event-day-multiple,
+.event-timespan-content.event-timespan-busy {
+    border: 2px solid #000000;
+}
+
+.event-month-heading,
+.event-full-day-heading {
+    font-weight: bolder;
+    font-size: larger;
+}
+
+.event-summary a {
+    font-weight: bolder;
+}
+
+/* Map content. */
+
+.event-map table {
+    display: block;
+    page-break-before: always; /* page-break-inside: avoid; not supported anywhere */
+    page-break-after: always;
+}
+
+.event-map-container > ol {
+    counter-reset: marker 0;
+    display: inline;
+}
+
+.event-map-container > img {
+    float: left;
+    margin-right: 1em;
+    margin-bottom: 0.5em;
+}
+
+.event-map-container > ol > li {
+    counter-increment: marker;
+    margin: 0.5em;
+    display: inline-block; /* not relying on list-item since the counter doesn't get incremented when the list is displayed inline */
+}
+
+.event-map-container > ol > li:before {
+    vertical-align: top;
+    content: counter(marker);
+    margin-left: -0.5em;
+    margin-right: 0.5em;
+}
+
+.event-map-container div.event-map-label-only:before {
+    content: counter(marker);
+}
+
+div.event-map-label-only {
+    display: block;
+    position: absolute;
+    /* position and dimensions specified in the HTML */
+    border: 2px solid #d00;
+}
+
+div.event-map-label {
+    position: static !important;
+    visibility: hidden;
+    display: inline-block;
+    vertical-align: top;
+}
+
+div.event-map-label .event-map-details {
+    position: static !important;
+    display: block;
+    visibility: visible;
+}
+
+.event-map-unpositioned .event-map-location-events > li,
+div.event-map-label .event-map-details {
+    padding: 0.5em;
+    border: 1px solid #ddd;
+}
+
+.event-map-shadow {
+    visibility: hidden;
+}
+
+.event-map-location {
+    visibility: visible;
+    background-color: transparent;
+}
+
+tr.event-map-unpositioned > td {
+    text-align: left;
+}
+
+tr.event-map-unpositioned {
+    page-break-before: always; /* make sure unpositioned events can be omitted from the printout */
+}
+
+.event-map-unpositioned .event-map-location-events > li {
+    margin: 1em;
+    display: inline-block;
+}
+
+.event-map-unpositioned ul.event-map-location-events {
+    display: block !important;
+}
+
+.event-map-show-control,
+.event-map-hide-control {
+    display: none !important;
+}
+
+/* vim: tabstop=4 expandtab shiftwidth=4
+ */

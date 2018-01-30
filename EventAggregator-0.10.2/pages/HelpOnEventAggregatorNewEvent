@@ -1,0 +1,75 @@
+##master-page:HelpTemplate
+##master-date:Unknown-Date
+#format wiki
+#language en
+
+== EventAggregatorNewEvent ==
+
+The !EventAggregatorNewEvent action provides support for creating new events more conveniently than manually editing an event page based on a template. The action can be selected from the actions menu on any page, or it can be invoked by selecting a day number in an !EventAggregator calendar view.
+
+Upon invoking the action, a form will be displayed requesting values for the following items:
+
+ * The title or summary of the event; this will be used as the page name.
+ * The location of the event (optional).
+ * The start date of the event.
+ * A description of the event (optional).
+ * A canonical URL for the event (optional).
+
+Additional controls are available through a number of buttons:
+
+ * `Specify a different location` exposes a field where a potentially new or not previously known location can be specified. The latitude and longitude of this new location can also be specified if desired.
+ * `Specify end date` exposes a field for the end date of the event (if different from the start date).
+ * `Specify times` exposes fields for the start and end times of the event.
+   * `Use local time` exposes a field which links time information to a time "regime" observed in a particular place.
+   * `Specify UTC offsets` exposes fields which allow times to be associated with particular time zones. Offsets can be written like, for example, `0200` or `+0200` for zones east of the prime meridian, and `-0200` for zones west of the prime meridian.
+   * `Make times apply everywhere` hides time zone-related fields, indicating that the time is to be considered local to the observer.
+ * `Add topic` permits topic information to be specified.
+ * `Show advanced options` permits advanced options to be inspected and changed.
+
+When the form is submitted, a new page will be created and the supplied details inserted into the appropriate locations in the page. The new page will then be opened for further editing.
+
+If a page already exists with a name identical to that provided as the event title, the form will prompt for an alternative title. If no end date is provided, the start and end dates will be identical in the newly created page.
+
+{{{#!wiki tip
+If editing of the new page is cancelled, no new page should be created. Thus, it should be safe to create an event using the form, inspect the page, and then decide whether or not the page should really be created for the event.
+}}}
+
+== Categories and Templates ==
+
+{{{#!wiki tip
+To manually select categories and templates, select the `Show advanced options` button in the form.
+}}}
+
+If the action has been invoked by following a link from a calendar, then the default categories assigned to a new event are derived from those used to present events in the calendar. Otherwise, no categories are selected by default for a new event.
+
+New event pages are derived from a particular template page. If the action has been invoked by a link provided by a calendar, the `template` parameter of the !EventAggregator macro may specify the default template page for the new event. If no such parameter was used for the calendar, or if no calendar was involved (such as when the action is invoked from the editing menu), the EventTemplate page is chosen to be the default template page for the event.
+
+A technical note: this underlying default setting (the use of EventTemplate) can be changed by setting or editing the `event_aggregator_new_event_template` configuration setting for the Wiki.
+
+== Parent Page ==
+
+{{{#!wiki tip
+To manually select the parent page, select the `Show advanced options` button in the form.
+}}}
+
+An event may be assigned a parent page, resulting in the event page being created as a sub-page of this parent page. For a collection of events, a parent page acts as a common container for all the event pages in the collection. For example, a parent page called '''Appointments''' could be defined for the events '''Summer Party''' and '''Winter Party''' with the pages for the events being created as '''Appointments/Summer Party''' and '''Appointments/Winter Party'''. In the calendar, these events would not include '''Appointments''' in their names by default. See the related [[HelpOnEventAggregator#Assigning_Templates_and_Parent_Pages|guide to these options]] for more information.
+
+If the action has been invoked by a link provided by a calendar, the `parent` parameter of the !EventAggregator macro may specify the default parent page for the new event. If no such parameter was used for the calendar, or if no calendar was involved (such as when the action is invoked from the editing menu), no parent page is chosen.
+
+== Overriding the Event Page ==
+
+To completely override the choice of event page, select the `Choose page name` button in the form, and then specify an appropriate name. The following variables can be used in the chosen page name:
+
+|| '''Variable''' || '''Description'''                                        ||
+|| `@TITLE@`      || The title or summary of the event specified in the form  ||
+|| `@``PAGE@`     || The current page name                                    ||
+|| `@PARENT@`     || The parent page for events as described above            ||
+|| `@STARTDATE@`  || The start date of the event having the form `YYYY-MM-DD` ||
+|| `@ENDDATE@`    || The end date of the event having the form `YYYY-MM-DD`   ||
+|| `@``DATE@`     || A synonym for `@STARTDATE@`                              ||
+
+As indicated initially, event pages have a page name of `@PARENT@/@TITLE@` unless this is overridden.
+
+== See Also ==
+
+ * HelpOnEventAggregator - a macro producing event calendars and listings

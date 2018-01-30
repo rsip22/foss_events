@@ -1,0 +1,351 @@
+##master-page:HelpTemplate
+##master-date:Unknown-Date
+#format wiki
+#language en
+
+== EventAggregator ==
+
+The !EventAggregator macro for !MoinMoin can be used to display event calendars or listings which obtain their data through "aggregation" from pages belonging to specific categories (such as CategoryEvents) or from remote event sources.
+
+<<TableOfContents(3)>>
+
+== Creating Events ==
+
+{{{#!wiki tip
+This documentation discusses only the creation of events on Wiki pages. It is also possible to collect or "aggregate" events from other sources, but the process of creating events using such sources is beyond the scope of this text.
+}}}
+
+The easiest way to create an event is to hover over or select a day number in a calendar and to follow the "New event" link, or if the calendar is being shown as a list, map or table, to select the "New event" link below the calendar content. If you do not have a calendar set up, take a look at the instructions for [[#PreparingACalendar|preparing]] and [[#ShowingEventCalendars|showing]] calendars first.
+
+Each event must be created on a new page belonging to the appropriate event category, if the calendar has been configured to only look for events in particular categories. The following action can be used to create a new event page (using [[HelpOnEventAggregatorNewEvent|EventAggregatorNewEvent]]) without looking at a calendar:
+
+(!) <<Action(EventAggregatorNewEvent,Add an event)>>
+
+Since each event is represented by a page, creating a new page based on an appropriate template is also sufficient. For pages belonging to CategoryEvents, you can do this by filling out and submitting this form (which uses EventTemplate):
+
+<<NewPage(EventTemplate,Add an event page)>>
+
+The event page describes the event in more detail, and the start and end dates of the event must be specified in a definition list so that they can be read from the page and displayed by the !EventAggregator. The EventTemplate provides some guidance, and all you need to do is to replace the `YYYY-MM-DD` placeholders with actual year, month and day values. For example:
+
+{{{
+ Start:: 2009-06-28
+ End:: 2009-07-04
+}}}
+
+You can add text which is more readable for humans provided that the `YYYY-MM-DD` format values are present somewhere in each entry. For example:
+
+{{{
+ Start:: Sunday 28th June 2009 (2009-06-28)
+ End:: Saturday 4th July 2009 (2009-07-04)
+}}}
+
+Obviously, duplicating the date information introduces a risk of this information becoming inconsistent, so beware!
+
+=== Adding Time Information ===
+
+In addition to date information, !EventAggregator understands time information; this is specified using the `HH:MM:SS` format (`HH` for hour digits in a 24-hour clock scheme, `MM` for minutes, and `SS` for seconds). The hour and minute details are mandatory; the seconds are optional. For example:
+
+{{{
+ Start:: 2009-06-30 10:30
+ End:: 2009-06-30 11:00
+}}}
+
+With no additional information, this indicates a time period from 10:30 (10:30am) until 11:00 (11am) without specifying a time zone. Consequently, such a period could be interpreted as applying ''in any location'' or ''in an agreed but unspecified location''. Where such things could lead to confusion, such as in the planning of an Internet meeting where people may join the meeting from many different places, time zone information can be specified. For example:
+
+{{{
+ Start:: 2009-06-30 10:30 UTC+0100
+ End:: 2009-06-30 11:00 UTC+0100
+}}}
+
+This indicates that the time is defined in a zone one hour ahead of UTC, thus defining a UTC period of 09:30 (9:30am) until 10:00 (10am). It is also possible to drop `UTC` and the last two minute digits where appropriate:
+
+{{{
+ Start:: 2009-06-30 10:30 +01
+ End:: 2009-06-30 11:00 +01
+}}}
+
+For an event occurring in British Summer Time (BST, GMT/UTC+01) this is a satisfactory means of describing the associated period. However, it can be more convenient to define an event in terms of the wall-clock time at a particular location. Sometimes, a regular meeting may occur at a particular time regardless of the introduction of daylight saving (or summer) time, and people can find it awkward to remember and choose the appropriate time zone, and thus the correct UTC offset. So instead, a time "regime" can be given. For example:
+
+{{{
+ Start:: 2009-06-30 10:30 Europe/London
+ End:: 2009-06-30 11:00 Europe/London
+}}}
+
+This indicates that in Britain (a "regime" defined for London, Europe) on the specified day, at 10:30am wall-clock time - that is, in the time zone reflected by properly adjusted local clocks - the event will begin, concluding at 11am according to the same clocks.
+
+For most events, specifying a "regime" should be sufficiently accurate and unambiguous. However, some potential issues with specifying time information in such a way are [[#TimeProblems|described below]].
+
+=== Supported Event Properties ===
+
+As well as the start and end dates of an event, the following properties are also recognised as being part of an event description:
+
+ Title:: the preferred name of the event in the calendar
+ Summary:: a synonym for title
+ Topics:: a list of topics related to the event - use a comma (`,`) to separate topic names
+ Categories:: a synonym for topics - note that this means "event categories", not "page categories" which are a distinct concept
+ Location:: the location of the event - this may [[#Showing_Events_on_Maps|position the event on maps]] if the location is known to !EventAggregator
+
+These properties may be incorporated into representations or summaries of events.
+
+Textual properties can be quoted in a limited way using the verbatim or monospaced text Wiki syntax. For example:
+
+{{{
+ Summary:: <<Verbatim(EuroPython)>> 2009
+ Topics:: Python, <<Verbatim(EuroPython)>>, Zope
+}}}
+
+=== Listing Many Events on a Page ===
+
+Sometimes, it can be useful to list many events or event occurrences on a single page. For example, unlike something like an annual conference where a different event page makes sense for each occurrence of the conference, something like a regular meeting of a group of people might merit its own event page, but it would be inconvenient to make a new page for every single meeting occasion.
+
+It is therefore possible to list many event occurrences on the same page by adding a new set of properties for each occurrence. For example:
+
+{{{
+ Start:: Monday 1st February 2010 (2010-02-01)
+ End:: Monday 1st February 2010 (2010-02-01)
+ Summary:: MoinMoin User Group Meeting
+
+Previous meetings:
+
+ Start:: Monday 4th January 2010 (2010-01-04)
+ End:: Monday 4th January 2010 (2010-01-04)
+ Summary:: MoinMoin User Group Meeting
+}}}
+
+To start a distinct event, just define a property that has already been recorded for the previous event on the page, if any. Usually, the start and end dates will be the most suitable properties for this purpose.
+
+Be careful ''not'' to start a distinct event with a property that was ''not'' recorded for the previous event: the result will be the property being added to the previous event, even if the property appears adjacent to the rest of the new event definition.
+
+=== Using Event Regions to List Events ===
+
+To be certain of events being defined individually, it is possible to use event regions rather than rely on !EventAggregator to figure out where events begin and end in the page. For example:
+
+{{{{
+{{{#!event
+ Start:: Monday 1st February 2010 (2010-02-01)
+ End:: Monday 1st February 2010 (2010-02-01)
+ Summary:: MoinMoin User Group Meeting
+}}}
+
+Previous meetings:
+
+{{{#!event
+ Start:: Monday 4th January 2010 (2010-01-04)
+ End:: Monday 4th January 2010 (2010-01-04)
+ Summary:: MoinMoin User Group Meeting
+}}}
+}}}}
+
+By using event regions explicitly, it becomes possible for enhanced formatting and manipulation of the event data to be supported by !EventAggregator and other !MoinMoin extensions.
+
+<<Anchor(TimeProblems)>>
+=== Occasional Problems with Times ===
+
+In most circumstances, specifying a time "regime" should result in an appropriate time zone being deduced and thus defined for an event. In some circumstances, however, such wall-clock times can be ambiguous or ill-defined. For example:
+
+{{{
+ Start:: 2010-03-28 02:30 Europe/London
+ End:: 2010-03-28 02:45 Europe/London
+}}}
+
+In this example, the given times (2:30am and 2:45am) do not exist as wall-clock times: since British clocks observe GMT/UTC until 2am and then switch to BST (GMT/UTC+01), times between 2am and 3am do not really appear on clocks on that particular day. !EventAggregator will indicate a problem with events specified in such a way, but will still produce [[HelpOnEventAggregatorSummary|event summaries]] assuming that the intention was to schedule such a period as starting 30 minutes after 2am in GMT/UTC and ending 45 minutes after 2am in GMT/UTC, pretending that the time zone preceding the zone change has remained in force for the sake of the event.
+
+Where the wall-clock time is effectively repeated, !EventAggregator will also indicate a problem with events defined using such ambiguous times. For example:
+
+{{{
+ Start:: 2010-10-31 02:30 Europe/London
+ End:: 2010-10-31 02:45 Europe/London
+}}}
+
+In this example, the given times (2:30am and 2:45am) ''do'' exist as wall-clock times, but such times appear ''twice'' on clocks: since British clocks observe BST (GMT/UTC+01) until 3am and then switch to GMT/UTC, times between 2am and 3am are visited twice by clocks on that particular day. For [[HelpOnEventAggregatorSummary|event summaries]], the assumption will be made that the intention was to schedule such a period as starting 30 minutes after 2am in BST and ending 45 minutes after 2am in BST, pretending (as above) that the time zone preceding the zone change is the correct zone.
+
+Naturally, without explicitly specifying a time zone (as an offset from UTC), it is not possible to schedule the above event for the period from 2:30am until 2:45am in the GMT/UTC time zone. However, when !EventAggregator indicates a problem with the event specification, an organiser can be alerted to the problem and thus fully specify the event times. Where !EventAggregator provides an implicitly assumed time (and where the organiser ignores the warnings or does not want to specify the time zone), no-one will be late for (or miss) the event: the earliest possible time will have been chosen, giving participants the opportunity to return at the "correct" time should the assumed time have proven to be "incorrect".
+
+<<Anchor(PreparingACalendar)>>
+== Preparing a Calendar ==
+
+Before trying to show a calendar or trying to create any events, you must decide on where those events will come from. This can be one or more of the following:
+
+ * A category in the Wiki containing pages for your events
+ * An event source which will provide events to the Wiki
+ * Pages that can be found using a particular search pattern
+
+You can choose to show a calendar based on categories, event sources and a search pattern, obtaining events from each of these things and combining them into a single view.
+
+If you decide to organise your events using categories, you can create a new category for the purpose of managing events by filling out and submitting this form:
+
+<<NewPage(CategoryTemplate,Add a new category,,Category%s)>>
+
+Available event sources should be defined on the [[EventSourcesDict|event sources]] page, and the source name is the piece of information to be noted when preparing a calendar.
+
+Where categories are to be used, it is not strictly necessary to have a dedicated category for events, but having such categories can make event management easier by preventing event pages getting mixed up with other kinds of pages. And since pages can belong to more than one category, you can still assign event pages to other categories and yet isolate the event pages via their own category when you need to.
+
+=== Defining Event Sources ===
+
+!EventAggregator uses a page called EventSourcesDict to define providers of event information (unless the `event_aggregator_sources_page` configuration setting has been changed). Follow the instructions on the EventSourcesDict page to define new event sources.
+
+<<Anchor(ShowingEventCalendars)>>
+== Showing Event Calendars ==
+
+To show a calendar, use the !EventAggregator macro with a list of event categories. For example:
+
+{{{
+## Show Events and Training categories.
+<<EventAggregator(CategoryEvents,CategoryTraining)>>
+}}}
+
+The calendar, shown by default, is automatically filled out with the details of each event in the specified category (or categories), colouring each event period in an automatically generated colour.
+
+To use event sources instead of categories, specify them using `source` parameters. For example:
+
+{{{
+## Show events from the GriCal and FSFE sources.
+<<EventAggregator(source=GriCal,source=FSFE)>>
+}}}
+
+To use a search pattern instead of categories or sources, specify it using the `search` parameter. For example:
+
+{{{
+## Show events in pages below the MonthCalendarEvents page.
+<<EventAggregator(search="title:MonthCalendarEvents/")>>
+}}}
+
+This example lets !EventAggregator behave somewhat like the [[HelpOnMacros/MonthCalendar|MonthCalendar]] macro, although new events created using the "New event" link do not currently create appropriately named pages.
+
+Categories can be combined with sources, thus aggregating "internal" and "external" events:
+
+{{{
+## Show events from the Events category and the GriCal source.
+<<EventAggregator(CategoryEvents,source=GriCal)>>
+}}}
+
+Specific periods can be defined using the `start` and `end` parameters. For example:
+
+{{{
+## Show June and July 2009.
+<<EventAggregator(CategoryEvents,start=2009-06,end=2009-07)>>
+}}}
+
+By using specific month values, a fixed window of time can be presented, displaying only events occurring within that period. It is possible to omit `start` or `end` in order to show all events up to (by omitting `start`) or starting from (by omitting `end`) a particular month.
+
+There are special values which are significant. The `current` value refers to the current month and can be used with the minus and plus operators to refer, respectively, to months before and after the current month:
+
+{{{
+## Show this and next month.
+<<EventAggregator(CategoryEvents,start=current,end=current+1)>>
+## Show this and last month.
+<<EventAggregator(CategoryEvents,start=current-1,end=current)>>
+}}}
+
+In addition, the `yearstart` and `yearend` values refer to the first and last months of the current year:
+
+{{{
+## Show this year's events.
+<<EventAggregator(CategoryEvents,start=yearstart,end=yearend)>>
+## Show events from last December to next January.
+<<EventAggregator(CategoryEvents,start=yearstart-1,end=yearend+1)>>
+}}}
+
+=== Event Naming ===
+
+The default calendar view shows event names once per week. However, you can choose to show an event name on each day an event occurs:
+
+{{{
+## Show the name on every day.
+<<EventAggregator(CategoryEvents,names=daily)>>
+## Show the name once per week.
+<<EventAggregator(CategoryEvents,names=weekly)>>
+}}}
+
+=== Navigation Controls ===
+
+The above examples have all provided fixed views of known events. However, a set of controls can be added to a calendar in order to let users navigate different time periods. This is done by providing a `calendar` parameter, indicating the name of the calendar, and by specifying a period of time:
+
+{{{
+## Provide a navigable calendar.
+<<EventAggregator(CategoryEvents,start=current,end=current,calendar=monthly)>>
+}}}
+
+Without any time period, the calendar would show all events, and there would be no real need to provide navigation, since there would be no events outside the displayed period to navigate to. It is possible to omit either the `start` or the `end` parameter and still provide navigation, however.
+
+=== Showing Calendar Days ===
+
+To view the individual days in a calendar, it is possible to hover over or select a day number and select the "View day" link. However, a calendar view can be set up using the macro as follows:
+
+{{{
+## Show yesterday, today and tomorrow.
+<<EventAggregator(CategoryEvents,start=current-1,end=current+1,mode=day)>>
+}}}
+
+In the above example, specifying a `mode` of `day` sets the resolution of the calendar to that of individual days, and thus the special value `current` refers to the current day (today) instead of the current month.
+
+In the day view, time information is shown so that it becomes possible to see whether events conflict with each other. In addition, location information is shown above columns of events to help with event scheduling.
+
+=== Assigning Templates and Parent Pages ===
+
+New events can be added to a calendar by following the "New event" links provided when hovering over or selecting each of the day numbers; this opens the form provided by the !EventAggregatorNewEvent action. For all events belonging to a particular calendar, it can be convenient to assign a default template page, so that the information provided by such events is consistent. Thus, it is possible to specify such a template page using the `template` parameter. For example:
+
+{{{
+## Specify a particular template page as the default event page template.
+<<EventAggregator(CategoryEvents,template=SpecialEventTemplate)>>
+}}}
+
+It can also be convenient to add new event pages under a common parent page. This can be achieved by specifying such a page using the `parent` parameter. For example:
+
+{{{
+## Specify a particular parent page as the default container for new events.
+<<EventAggregator(CategoryEvents,parent=Events)>>
+}}}
+
+Creating an event called '''Meeting''' under a parent called '''Events''' will make the page '''Events/Meeting''', and this will be shown as '''Meeting''' in the calendar. However, if a different parent is chosen, such as '''Meetings''', then the full path to the page will be shown in the calendar: '''Meetings » Meeting'''.
+
+== Showing Event Lists and Tables ==
+
+A more plain view of events can be displayed by specifying the `mode` parameter as follows:
+
+{{{
+<<EventAggregator(CategoryEvents,mode=list)>>
+}}}
+
+The `list` value causes a list view to be employed.
+
+Another alternative view can be chosen by specifying the `mode` parameter with a value of `table` as in the following example:
+
+{{{
+<<EventAggregator(CategoryEvents,mode=table)>>
+}}}
+
+This collects all appropriate events into a single table, applying colouring to the cells belonging to a particular event based on that event's topic (or category) information. By default, only the following topics (or categories) cause cell colouring:
+
+ * `conference` - using the `event-table-category-conference` style
+ * `special` - using the `event-table-category-special` style
+ * `training` - using the `event-table-category-training` style
+
+To define your own topic colours, edit the `event-aggregator.css` file which is provided with the !EventAggregator distribution, and then reinstall that file for each of the Wiki themes of interest. Topics involved in event colouring should be mutually exclusive: more than one such topic should not be specified for any given event.
+
+== Showing Events on Maps ==
+
+If a map is defined, as described below, and the name of such a map is given when using the macro, it becomes possible to allow a map view to be shown. For example:
+
+{{{
+<<EventAggregator(CategoryEvents,mode=map,map=europe)>>
+}}}
+
+The above example will show all events in the given category whose locations are known and are found to refer to places on the `europe` map.
+
+=== Defining Maps ===
+
+!EventAggregator uses a page called EventMapsDict to define and retain the available maps (unless the `event_aggregator_maps_page` configuration setting has been changed). Follow the instructions on the EventMapsDict page to define new maps.
+
+=== Defining Locations ===
+
+!EventAggregator uses a page called EventLocationsDict to define known locations (unless the `event_aggregator_locations_page` configuration setting has been changed). Follow the instructions on the EventLocationsDict page to define new locations.
+
+== The Default View and Switching Views ==
+
+The `calendar` value for the `mode` parameter causes the default calendar view to be employed, but you can switch the view - effectively changing the `mode` - using the links provided below the view produced by this macro. The map view is only available via a link if a map name has been given using the `map` parameter.
+
+== See Also ==
+
+ * HelpOnEventAggregatorNewEvent - an action providing a form for creating new events conveniently
+ * HelpOnEventAggregatorSummary - an action producing iCalendar event summaries

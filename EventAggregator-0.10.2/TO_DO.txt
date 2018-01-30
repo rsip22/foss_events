@@ -1,0 +1,108 @@
+Navigation Controls
+-------------------
+
+The "New event" link should probably not be present when only remote events
+are being aggregated by a calendar.
+
+Improve the accessibility of controls by providing links with titles and
+offering links as alternatives to pop-up elements.
+
+Points in Time
+--------------
+
+Consider making dates convertible to timespans of the form (start of day,
+start of next day).
+
+Localised Keywords
+------------------
+
+It should be possible to define events using localised equivalents of "start",
+"end", "summary" and so on. To achieve this, the page language would be found
+and regular expressions built to use the localised keywords, falling back on
+the English keywords, would then search for event details.
+
+Recurring Events
+----------------
+
+Recurring event information from iCalendar sources should be considered in
+order to avoid showing incomplete or incorrect event datetimes. Ultimately,
+such information may need to be parsed and incorporated into the general event
+recurrence processing.
+
+Having events recur at certain intervals would potentially involve the
+expansion of events to produce multiple instances within a specified period of
+interest, and such expansion could occur after an event's details have been
+read. Care would need to be taken in cases where no limits are placed on a
+calendar: the expanded instances should not be allowed to recede into the past
+and future indefinitely; where no other events exist to provide implicit
+limits, some other default limits might be required to let the expansion
+occur.
+
+The description of recurring events could be based on the iCalendar
+specification, although simpler schemes could be preferable. Recurring event
+descriptions might start with "every" and then provide a time period ("day",
+"week", "month", "year") for offsets from a specified date or time, perhaps
+using qualifiers ("first", "second", "other", and so on), or instead provide a
+more complete description using additional qualifiers that may override any
+specified date or time for instances other than the primary occurrence. For
+example, "every second Wednesday of every other month".
+
+The resolution of each successive <recurrence> would need to be lower than
+those it follows. Thus, "every second day of every second week..." would be
+valid whereas "every second week of every second day..." would not.
+
+Map Views
+---------
+
+Other projections might be supported. This would be necessary for various
+retrieved map images.
+
+Dynamic images obtained from other sites or generated locally might provide some
+enhancements to the map view. For example, a weather/radar image might show the
+cloud or rain forecast either for the current situation or, if forecasts are
+available, for the times of events shown.
+
+Consider having day numbers down the side of a map view with highlighted days
+indicating days having events, and with pop-up elements shown upon hovering over
+each highlighted day.
+
+To Do Items
+-----------
+
+Consider adding support for "to do" items. These might have time-related details
+such as deadlines, but are more likely to have relationships with other items,
+potentially forming a hierarchy of items.
+
+Event Section Parser
+--------------------
+
+Events in page sections/regions could be presented using more sophisticated
+methods and potentially be editable. To support direct editing, the parser
+would provide a hidden form field indicating the location of the section in
+the Wiki text, and the new event action would be enhanced to read existing
+events from the indicated page region, populating the form fields with the
+data found in the page.
+
+UID Properties
+--------------
+
+Especially in the case of aggregation from multiple sources, the only reliable
+way of avoiding repetition of the same events described in different places is
+for authors to include a UID property identifying each event, using the same
+value regardless of where the event is being published.
+
+Formatting in iCalendar Output
+------------------------------
+
+If there is a reasonably standard way of incorporating Wiki text in iCalendar
+output alongside plain text, this would enable events aggregated from Wiki
+sources to use Wiki text to describe things like the location and topics of an
+event with links and other formatting that could then be reproduced in the
+aggregating Wiki.
+
+Remote Source Timeouts
+----------------------
+
+Sometimes, network problems can cause delays in accessing remote sources. The
+library should support either a timeout mechanism or asynchronous retrieval of
+remote source data.

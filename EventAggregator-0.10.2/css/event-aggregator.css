@@ -1,0 +1,665 @@
+/*  event-aggregator.css - some additional styles for the EventAggregator macro
+                           which can be included in screen.css and print.css
+                           using...
+
+                           @import "event-aggregator.css";
+
+                           ...before any rules.
+
+Copyright (c) 2009, 2010, 2011, 2012, 2013 by Paul Boddie
+Licensed under the GNU GPL (v2 or later), see COPYING.txt for details.
+*/
+
+/* Controls. */
+
+.event-controls {
+    display: block;
+}
+
+.event-view-controls,
+.event-download-controls {
+    text-align: center;
+}
+
+.event-view,
+.event-download {
+    margin-left: 1em;
+    margin-right: 1em;
+    text-align: left;
+}
+
+.event-view a {
+    font-size: smaller;
+    display: inline-block;
+}
+
+.event-download {
+    position: relative;
+    font-size: smaller;
+    padding-bottom: 0.5em;
+}
+
+.event-download-popup {
+    display: none;
+    font-size: larger;
+}
+
+.event-download:hover .event-download-popup,
+.event-download:target .event-download-popup,
+.event-day-box:hover .event-day-number-popup,
+.event-day-box:target .event-day-number-popup {
+    display: block;
+    position: absolute;
+    left: 0;
+    z-index: 3;
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
+}
+
+.event-download:hover .event-download-popup,
+.event-download:target .event-download-popup {
+    top: 1em; /* negligible top padding + 1em, leaving 0.5em bottom padding */
+    padding: 0.5em 0.5em 0 0.5em;
+}
+
+.event-day-box:hover .event-day-number-popup,
+.event-day-box:target .event-day-number-popup {
+    top: 1.25em; /* 0.25em top padding + 1em, leaving 0.25em bottom padding */
+    padding: 0.5em;
+}
+
+.event-download-item {
+    padding-top: 0.5em;
+    margin-bottom: 0.5em;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    white-space: nowrap;
+}
+
+.focus-only {
+    display: none;
+}
+
+.event-download:target .focus-only {
+    display: block;
+}
+
+.event-download-webcal a {
+    background-color: #99d;
+}
+
+.event-download-http a {
+    background-color: #d99;
+}
+
+.event-download-webcal a:hover,
+.event-download-webcal a:focus,
+.event-download-webcal a:active {
+    background-color: #00d;
+}
+
+.event-download-http a:hover,
+.event-download-http a:focus,
+.event-download-http a:active {
+    background-color: #d00;
+}
+
+.event-download-webcal a,
+.event-download-webcal a:link,
+.event-download-webcal a:hover,
+.event-download-webcal a:focus,
+.event-download-webcal a:active,
+.event-download-webcal a:visited,
+.event-download-http a,
+.event-download-http a:link,
+.event-download-http a:hover,
+.event-download-http a:focus,
+.event-download-http a:active,
+.event-download-http a:visited {
+    font-size: inherit;
+    font-weight: bold;
+    color: #fff !important;
+    text-decoration: none !important;
+    padding: 0.25em;
+    margin-right: 0.25em;
+}
+
+.event-download-link,
+.event-download-period {
+    display: block;
+    text-align: right;
+}
+
+.event-download-link {
+    margin: 0;
+    padding-bottom: 0.5em;
+}
+
+.event-download-period {
+    margin-top: 0.5em;
+}
+
+.event-download-period-raw {
+    display: block;
+    font-size: smaller;
+    text-align: right;
+}
+
+/* Calendar view. */
+
+.event-calendar {
+    position: relative;
+}
+
+.event-calendar-navigation .next,
+.event-calendar-navigation .previous {
+    position: absolute;
+    top: 1em;
+    z-index: 2;
+}
+
+.event-calendar-navigation .previous {
+    left: 1em;
+}
+
+.event-calendar-navigation .next {
+    right: 1em;
+}
+
+.event-month {
+    width: 98%;
+    border-bottom: 1px solid #dddddd;
+    table-layout: fixed;
+    margin-top: 0; /* should not be necessary, but some browsers put this below the caption */
+}
+
+caption.event-month-heading {
+    margin: 0.5em 1px 1px 1px;
+    padding: 0.5em;
+    caption-side: top;
+}
+
+.event-calendar-navigation .next,
+.event-calendar-navigation .previous,
+.event-map-heading,
+.event-month-heading,
+.event-full-day-heading {
+    background-color: #777777;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.event-map-heading,
+.event-month-heading,
+.event-full-day-heading {
+    text-align: center;
+    border: 0;
+}
+
+.event-calendar-navigation a:link,
+.event-calendar-navigation a:hover,
+.event-calendar-navigation a:focus,
+.event-calendar-navigation a:visited,
+.event-map-heading a:link,
+.event-map-heading a:hover,
+.event-map-heading a:focus,
+.event-map-heading a:visited,
+.event-month-heading a:link,
+.event-month-heading a:hover,
+.event-month-heading a:focus,
+.event-month-heading a:visited,
+.event-full-day-heading a:link,
+.event-full-day-heading a:hover,
+.event-full-day-heading a:focus,
+.event-full-day-heading a:visited {
+    color: inherit !important;
+}
+
+.event-weekday-heading {
+    background-color: #999999;
+    color: #ffffff;
+    text-align: center;
+    border: 1px solid #dddddd;
+}
+
+/* Day types: days with content (busy), unused days (excluded or empty),
+              current (today). */
+
+.event-day-current.event-day-busy,
+.event-day-current.event-day-empty {
+    background-color: #ffdddd;
+}
+
+.event-day-busy,
+.event-timespan-busy {
+    background-color: #ffffff;
+}
+
+.event-day-excluded {
+    background-color: #dddddd;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+}
+
+.event-day-empty,
+.event-timespan-empty {
+    background-color: #ffffff;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+}
+
+.event-day-content.event-day-empty {
+    padding-bottom: 2em;
+}
+
+/* Day headings and numbers. */
+
+.event-day-current.event-day-heading {
+    background-color: #ffdddd;
+}
+
+.event-day-excluded.event-day-heading {
+    background-color: #dddddd;
+}
+
+.event-day-heading {
+    font-weight: normal;
+    text-align: left;
+    width: 14%;
+    vertical-align: top;
+    padding-top: 0;
+    padding-left: 0;
+    padding-bottom: 0.5em;
+    border-top: 1px solid #dddddd;
+    border-bottom: 0;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    background-color: #ffffff;
+}
+
+.event-day-box {
+    position: relative; /* see event-day-number-popup */
+}
+
+.event-day-empty span.event-day-number {
+    color: #000000;
+}
+
+.event-day-busy span.event-day-number {
+    background-color: #555555;
+    color: #ffffff;
+}
+
+.event-day-number {
+    padding: 0.25em;
+}
+
+.event-day-number a:link,
+.event-day-number a:hover,
+.event-day-number a:focus,
+.event-day-number a:visited {
+    color: inherit !important;
+}
+
+.event-day-number-link {
+    display: block;
+}
+
+/* Day content. */
+
+.event-day-content {
+    width: 14%;
+    vertical-align: top;
+    padding: 0;
+    border-top: 0;
+    border-bottom: 0;
+}
+
+.event-day-starting {
+    border-left: 0;
+    border-right: 1px solid #dddddd;
+}
+
+.event-day-ending {
+    border-left: 1px solid #dddddd;
+    border-right: 0;
+}
+
+.event-day-full,
+.event-day-single,
+.event-day-multiple {
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+}
+
+.event-day-current.event-day-start-gap,
+.event-day-current.event-day-end-gap {
+    background-color: #ffdddd;
+}
+
+.event-day-start-gap {
+    width: 2%;
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 1px solid #dddddd;
+    border-right: 0;
+    background-color: #ffffff;
+}
+
+.event-day-end-gap {
+    width: 2%;
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 1px solid #dddddd;
+    background-color: #ffffff;
+}
+
+/* Event details. */
+
+.event-summary-box {
+    position: relative;
+}
+
+.event-day-content a:link,
+.event-day-content a:hover,
+.event-day-content a:focus,
+.event-day-content a:visited {
+    color: inherit !important;
+}
+
+.event-summary {
+    padding: 0.75em;
+    margin-left: 0;
+    margin-right: 0;
+    overflow: hidden;
+}
+
+.event-day-single .event-summary {
+    padding: 0.75em 0.25em 0.75em 0.25em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
+.event-summary-popup,
+.event-day-number-popup {
+    display: none;
+    overflow: show;
+    position: absolute;
+    left: 0.5em;
+    top: 0;
+    z-index: 2;
+    padding: 0.75em 0.25em 0.75em 0.25em;
+    margin-right: 0.5em;
+}
+
+.event-summary-box:hover > .event-summary-popup {
+    display: block;
+}
+
+.event-summary-box:hover > .event-summary a {
+    visibility: hidden;
+}
+
+/* Day spacers. */
+
+.event-day-current.event-day-spacer {
+    background-color: #ffdddd;
+}
+
+.event-day-spacer {
+    min-height: 0.5em;
+    border-top: 0;
+    border-bottom: 0;
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+}
+
+/* Day view, showing days from a calendar. */
+
+.event-calendar-day {
+    width: 98%;
+    border-bottom: 1px solid #dddddd;
+    margin-top: 0; /* should not be necessary, but some browsers put this below the caption */
+}
+
+caption.event-full-day-heading {
+    margin: 0.5em 1px 1px 1px;
+    padding: 0.5em;
+    caption-side: top;
+}
+
+.event-scale-heading,
+.event-timespan-content,
+.event-timespan-spacer {
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+    border-left: 0;
+    border-right: 0;
+}
+
+.event-location-heading,
+.event-location-spacer {
+    border: 0;
+}
+
+.event-location-heading,
+.event-location-spacer,
+.event-timespan-spacer,
+.event-full-day-spacer {
+    background-color: #ffffff;
+}
+
+.event-location-heading {
+    text-align: center;
+    border: 0;
+    border-left: 1px dotted #ddd;
+    border-right: 1px dotted #ddd;
+    background-color: #ffffff;
+}
+
+.event-scale-heading {
+    padding-bottom: 2em;
+}
+
+.event-scale-heading,
+.event-timespan-content {
+    vertical-align: top;
+}
+
+.event-timespan-content a:link,
+.event-timespan-content a:hover,
+.event-timespan-content a:focus,
+.event-timespan-content a:visited {
+    color: inherit !important;
+}
+
+.event-timespan-spacer {
+    width: 2%;
+}
+
+/* List/summary view. */
+
+.event-listings {
+    list-style: none;
+}
+
+.event-listings-heading {
+    border-bottom: 1px solid #999999;
+    text-align: center;
+}
+
+.event-period-listings {
+    list-style: disc;
+    padding-bottom: 2em;
+}
+
+/* Table view */
+
+.event-table {
+    width: 98%;
+}
+
+.event-table-heading {
+    font-weight: bold;
+}
+
+.event-table-details a:link,
+.event-table-details a:hover,
+.event-table-details a:focus,
+.event-table-details a:visited {
+    color: inherit !important;
+}
+
+.event-table-category-conference {
+    background-color: #ff9999;
+    color: #000000;
+}
+
+.event-table-category-training {
+    background-color: #99ff99;
+    color: #000000;
+}
+
+.event-table-category-special {
+    background-color: #ffff99;
+    color: #000000;
+}
+
+/* Map view. */
+
+.event-map {
+    text-align: center;
+}
+
+.event-map table {
+    display: inline-block;
+}
+
+caption.event-map-heading {
+    margin: 0.5em 1px 1px 1px;
+    padding: 0.5em;
+    caption-side: top;
+}
+
+.event-map-container {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+.event-map-container > img {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    /* image and dimensions specified in the HTML */
+}
+
+.event-map-container > ol {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+/* Label element and pop-up effects. */
+
+div.event-map-label-only {
+    display: none;
+}
+
+a.event-map-label-link span {
+    display: none;
+}
+
+a.event-map-label-link:focus span {
+    display: inline-block;
+    background-color: #fff;
+    padding: 0.25em;
+}
+
+div.event-map-label {
+    position: absolute;
+    /* position and dimensions specified in the HTML */
+    border: 2px solid #d00;
+}
+
+div.event-map-label .event-map-details {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    min-width: 10em;
+}
+
+div.event-map-label:hover .event-map-details,
+div.event-map-label:target .event-map-details {
+    display: block;
+}
+
+/* Details elements. */
+
+.event-map-shadow {
+    background-color: #555;
+}
+
+.event-map-shadow .event-map-location {
+    position: relative;
+    top: -8px;
+    left: -8px;
+    padding: 0.25em;
+    background-color: #fff;
+}
+
+.event-map-unpositioned h2,
+.event-map-location h2 {
+    font-size: inherit !important;
+    text-align: center;
+}
+
+.event-map-unpositioned:not(:target) h2,
+.event-map-unpositioned:target .event-map-show-control,
+.event-map-unpositioned:not(:target) .event-map-hide-control,
+.event-map-unpositioned:not(:target) ul.event-map-location-events {
+    display: none;
+}
+
+.event-map-unpositioned:target h2,
+.event-map-unpositioned:not(:target) .event-map-show-control,
+.event-map-unpositioned:target .event-map-hide-control,
+.event-map-unpositioned:target ul.event-map-location-events {
+    display: block;
+}
+
+ul.event-map-location-events {
+    list-style-type: none;
+    padding: 0.25em;
+}
+
+ul.event-map-location-events li {
+    text-align: left;
+    padding: 0.25em 0 0.25em 0;
+}
+
+.event-map-period {
+    display: block;
+    font-size: smaller;
+}
+
+/* New event form. */
+
+td.event-time-selection,
+td.event-zone-selection,
+td.event-regime-selection.event-end-time {
+    vertical-align: bottom;
+}
+
+td.event-time-selection.label,
+td.event-regime-selection {
+    vertical-align: top;
+}
+
+/* vim: tabstop=4 expandtab shiftwidth=4
+ */
