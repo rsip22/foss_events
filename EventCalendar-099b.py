@@ -3400,6 +3400,8 @@ def download_events_ical():
     request = Globs.request
     formatter = Globs.formatter
 
+    request.content_type = "text/calendar; charset=%s" % config.charset
+
     return "Success!"
 
 
