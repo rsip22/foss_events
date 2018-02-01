@@ -156,9 +156,10 @@ CategoryEventCalendar
 
 from MoinMoin import wikiutil, config, search, caching
 from MoinMoin.Page import Page
+# from icalendar import Calendar, Event
 import re, calendar, time, datetime
 import codecs, os, urllib, sha
-# import icalendar
+import icalendar
 
 try:
     import cPickle as pickle
@@ -3398,11 +3399,71 @@ def download_events_ical():
     debug('Download events: icalendar')
 
     request = Globs.request
-    formatter = Globs.formatter
+    # formatter = Globs.formatter
 
     request.content_type = "text/calendar; charset=%s" % config.charset
 
-    return "Success!"
+    # write_resource(self.request)
+    # return 1, None
+    cal = icalendar.Calendar()
+    todo = icalendar.Event()
+    """
+    event['uid'] = '42'
+    event['dtstart'] = '20050404T080000'
+    """
+
+    # cal.add('attendee', 'MAILTO:maxm@mxm.dk')
+    # cal.add('attendee', 'MAILTO:test@example.com')
+
+    # read all the events
+    events, cal_events, labels = loadEvents()
+
+    # sort events
+    sorted_eventids = events.keys()
+    sorted_eventids.sort(comp_list_events)
+
+    # todo['title'] = item[0]
+    # event['title'] = converttext(item['title'])
+    # event['description'] = converttext(item['description'])
+    # eventitem['title'] = eventtitle
+    # eventitem['startdate'] = e_start_date
+    # eventitem['starttime'] = e_start_time
+    # eventitem['enddate'] = e_end_date
+    # eventitem['endtime'] = e_end_time
+    # eventitem['title'] = eventtitle
+    # eventitem['refer'] = referpage
+    # eventitem['bgcolor'] = e_bgcolor
+    # eventitem['label'] = e_label
+    # eventitem['description'] = e_description
+    # eventitem['recur_freq'] = e_recur_freq
+    # eventitem['recur_type'] = e_recur_type
+    # eventitem['recur_until'] = e_recur_until
+
+    def display(cal):
+        return cal.to_ical().replace('\r\n', '\n').strip()
+
+    def make_todo(event):
+        todo = icalendar.Todo()
+        # for item in events:
+        # todo['uid'] = make_uid(event)
+        # todo['title'] = converttext(event['title'])
+        todo['title'] = 'Title str'
+        todo['summary'] = 'event summary str'
+        # todo['DTSTAMP'] = formatcfgdatetime(event['startdate'], event['starttime'])
+        # todo['description'] = converttext(event['description'])
+        # todo['url'] = 'issue.html_url'
+        # todo['created'] = issue.created_at
+        # todo['last-modified'] = issue.updated_at
+        todo['status'] = 'NEEDS-ACTION'
+        # todo['organizer'] = make_reporter(issue)
+        # todo['labels'] = converttext(event['label'])
+        cal.add_component(todo)
+        return todo
+
+    for item in events:
+        make_todo(item)
+
+    return display(cal)
 
 
 def calhead_yearmonth(year, month, headclass):
