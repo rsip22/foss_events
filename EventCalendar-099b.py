@@ -160,6 +160,9 @@ from MoinMoin.Page import Page
 import re, calendar, time, datetime
 import codecs, os, urllib, sha
 import icalendar
+import json
+from MoinMoin import log
+logging = log.getLogger(__name__)
 
 try:
     import cPickle as pickle
@@ -3444,25 +3447,36 @@ def download_events_ical():
 
     def make_todo(event):
         todo = icalendar.Todo()
-        # for item in events:
         # todo['uid'] = make_uid(event)
         # todo['title'] = converttext(event['title'])
-        todo['title'] = 'Title str'
-        todo['summary'] = 'event summary str'
+        todo['title'] = item['title']
+        # todo['summary'] = item['description']
         # todo['DTSTAMP'] = formatcfgdatetime(event['startdate'], event['starttime'])
-        # todo['description'] = converttext(event['description'])
+        todo['description'] = item['description']
         # todo['url'] = 'issue.html_url'
         # todo['created'] = issue.created_at
         # todo['last-modified'] = issue.updated_at
-        todo['status'] = 'NEEDS-ACTION'
+        # todo['status'] = 'NEEDS-ACTION'
         # todo['organizer'] = make_reporter(issue)
-        # todo['labels'] = converttext(event['label'])
+        todo['labels'] = item['label']
         cal.add_component(todo)
         return todo
 
-    for item in events:
-        make_todo(item)
+    """
+    print 'EVENTS type: ', type(events)  # DICT
+    print 'CAL_EVENTS type: ', type(cal_events)  # DICT
+    print 'LABELS type: ', type(labels)  # DICT
+    """
+    # print 'event values: ', events.values()
 
+    for item in events.values():
+        make_todo(item)
+        # print '~~~ Item title: ', item['title']
+
+    """
+    for key in events:
+        print 'Key: ', key, 'events[key]: ', events[key] # THIS SORT OF WORKS
+    """
     return display(cal)
 
 

@@ -31,7 +31,15 @@ sorted_eventids = events.keys()
 
 sorted_eventids.sort(comp_list_events)
 
-<<EventCalendar: execution failed [sequence item 0: expected string or Unicode, list found] (see also the log)>>
+From **showReferPageParsed**:
+refer = event['refer']
+targettext = event[targettext]
+startdate = event['startdate']
+enddate = event['enddate']
+description = event['description']
+starttime = event['starttime']
+endtime = event['endtime']
+hid = event['hid']
 
 #### From EventAggregator:
 
@@ -61,7 +69,12 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 So wouldn't it be the ideal, if MoinMoin itself supported .ics? Or maybe it does natively, no need to express it on wikiutil.py?
 
-TODO:
+### TYPES:
+Calling function loadEvents() unpacks to dictionary variables (events, cal_events, labels) with info about events. Because of this, they can be interacted with events.values().
+
+Each *events* item is an unicode object (e_Workshops_1, e_Conferences_1, e_Conferences_2...).
+
+### TODO:
 * <del>Figure out how to link calaction=ical on the bottom menu bar. [http://localhost/MyStartingPage?calaction=ical](http://localhost/MyStartingPage?calaction=ical) works.</del> IT WORKS!
 * Install the EventAggregator macro and make it work.
     - For that, install moinsetup and proceed with the instalation as described on EventAggregator README
