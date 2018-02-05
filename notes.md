@@ -79,6 +79,6 @@ Each *events* item is an unicode object (e_Workshops_1, e_Conferences_1, e_Confe
 * Install the EventAggregator macro and make it work.
     - For that, install moinsetup and proceed with the instalation as described on EventAggregator README
 * <del>Figure out how to allow the download to happen. (Check other macros' code, specially EventAggregator) => The 'download' or opening the ical file on the proper software *should happen* when the proper headers are set. But now I have to figure out how to do this, because EventCalendar doesn't seem to do that (set the headers) at any point. Does Moin Wiki? There should be a new global variable? A new function that returns the headers?</del> DONE! This helped: https://moinmo.in/MoinMoinBugs/EditorContentTypeHttpHeader
-* <del>Install icalendar system-wide to import it to the EventCalendar module.</del> DOne.
-* Parse the events data to set the output to proper icalendar format.
-* How to return the .ics file and not the whole wiki page when cal_action is called.
+* <del>Install icalendar system-wide to import it to the EventCalendar module.</del> Done.
+* <del>Parse the events data to set the output to proper icalendar format.</del> This is sort of done, but I still have to work on the event dates.
+* How to return the .ics file and not the whole wiki page when cal_action is called. => This I am stuck with, I am thinking that maybe the only way to make this work is to turn the function into a new macro itself. But how to keep that from happening if the data for this new macro will be derivated from EventCalendar?

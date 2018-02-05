@@ -308,7 +308,6 @@ def execute(macro, args):
     if cal_action == 'ical':
         html_result = download_events_ical()
 
-
     # format output
     html.append( html_result )
     html.append( showmenubar() )
@@ -3402,7 +3401,7 @@ def download_events_ical():
     debug('Download events: icalendar')
 
     request = Globs.request
-    # formatter = Globs.formatter
+    formatter = Globs.formatter
 
     request.content_type = "text/calendar; charset=%s" % config.charset
 
@@ -3411,12 +3410,8 @@ def download_events_ical():
     cal = icalendar.Calendar()
     todo = icalendar.Event()
     """
-    event['uid'] = '42'
     event['dtstart'] = '20050404T080000'
     """
-
-    # cal.add('attendee', 'MAILTO:maxm@mxm.dk')
-    # cal.add('attendee', 'MAILTO:test@example.com')
 
     # read all the events
     events, cal_events, labels = loadEvents()
@@ -3425,19 +3420,12 @@ def download_events_ical():
     sorted_eventids = events.keys()
     sorted_eventids.sort(comp_list_events)
 
-    # todo['title'] = item[0]
-    # event['title'] = converttext(item['title'])
-    # event['description'] = converttext(item['description'])
-    # eventitem['title'] = eventtitle
     # eventitem['startdate'] = e_start_date
     # eventitem['starttime'] = e_start_time
     # eventitem['enddate'] = e_end_date
     # eventitem['endtime'] = e_end_time
-    # eventitem['title'] = eventtitle
     # eventitem['refer'] = referpage
     # eventitem['bgcolor'] = e_bgcolor
-    # eventitem['label'] = e_label
-    # eventitem['description'] = e_description
     # eventitem['recur_freq'] = e_recur_freq
     # eventitem['recur_type'] = e_recur_type
     # eventitem['recur_until'] = e_recur_until
@@ -3448,17 +3436,17 @@ def download_events_ical():
     def make_todo(event):
         todo = icalendar.Todo()
         # todo['uid'] = make_uid(event)
-        # todo['title'] = converttext(event['title'])
-        todo['title'] = item['title']
-        # todo['summary'] = item['description']
         # todo['DTSTAMP'] = formatcfgdatetime(event['startdate'], event['starttime'])
-        todo['description'] = item['description']
+        # todo['description'] = item['description']
         # todo['url'] = 'issue.html_url'
         # todo['created'] = issue.created_at
         # todo['last-modified'] = issue.updated_at
         # todo['status'] = 'NEEDS-ACTION'
         # todo['organizer'] = make_reporter(issue)
-        todo['labels'] = item['label']
+        todo.add('description', item['description'])
+        todo.add('labels', item['label'])
+        todo.add('title', item['title'])
+        todo.add('category', item['refer'])
         cal.add_component(todo)
         return todo
 
@@ -3477,7 +3465,8 @@ def download_events_ical():
     for key in events:
         print 'Key: ', key, 'events[key]: ', events[key] # THIS SORT OF WORKS
     """
-    return display(cal)
+    html = display(cal)
+    return formatter.rawHTML(html)
 
 
 def calhead_yearmonth(year, month, headclass):
