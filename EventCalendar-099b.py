@@ -3437,9 +3437,7 @@ def download_events_ical():
     def make_dtstart(event):
         try:
             event['starttime']
-            print 'start_time NOT empty: ', event['starttime']
         except NameError:
-            print 'start_time empty'
             event['starttime'] = u'0000'
         event_date_time = event['startdate']+event['starttime']
         return parser.parse(event_date_time)
