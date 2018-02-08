@@ -2,6 +2,7 @@ Events: {
     u'e_Workshops_2': {
         'date_len': 1,
         'startdate': u'20180124',
+        'starttime': u'1300',
         'time_len': 0,
         'enddate': u'20180124',
         'description': u'workshop test',

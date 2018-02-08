@@ -20,17 +20,6 @@ Info for one event, from **listshow_event(event)**:
 * % converttext(event['description'])
 * % showReferPageParsed(event, 'refer')
 
-From **showeventlist()**:
-* read all the events
-
-events, cal_events, labels = loadEvents()
-
-* sort events
-
-sorted_eventids = events.keys()
-
-sorted_eventids.sort(comp_list_events)
-
 From **showReferPageParsed**:
 refer = event['refer']
 targettext = event[targettext]
@@ -73,6 +62,19 @@ So wouldn't it be the ideal, if MoinMoin itself supported .ics? Or maybe it does
 Calling function loadEvents() unpacks to dictionary variables (events, cal_events, labels) with info about events. Because of this, they can be interacted with events.values().
 
 Each *events* item is an unicode object (e_Workshops_1, e_Conferences_1, e_Conferences_2...).
+
+### VEVENT
+canonical_order = ('SUMMARY', 'DTSTART', 'DTEND', 'DURATION', 'DTSTAMP', 'UID', 'RECURRENCE-ID', 'SEQUENCE', 'RRULE', 'RDATE', 'EXDATE')
+required = ('UID', 'DTSTAMP')
+singletons = ('CLASS', 'CREATED', 'DESCRIPTION', 'DTSTART', 'GEO', 'LAST-MODIFIED', 'LOCATION', 'ORGANIZER', 'PRIORITY', 'DTSTAMP', 'SEQUENCE', 'STATUS', 'SUMMARY', 'TRANSP', 'URL', 'RECURRENCE-ID', 'DTEND', 'DURATION', 'UID')
+
+### Make dtstart
+To add the DTSTART component, I had to create a new function to return proper dtstart data.
+
+item['startdate'] and item['starttime'] had be combined and converted to time and date format. If there is no starttime specified, it shouldn't throw an error - it probably should assume that the event will be all day long (in the timezone of the calendar? Not the ideal, but events in EventCalendar don't usually get location data...).
+
+item['startdate'] and item['starttime'] are unicode objects, so they must be converted to the proper time and date format. Because this is a very commom operation, there are tools that have already been developed to help with this taks. In this case, the [dateutil module](https://dateutil.readthedocs.io/en/stable/) provides to the standard datetime Python module, allowing this operation to be performed.
+
 
 ### TODO:
 * <del>Figure out how to link calaction=ical on the bottom menu bar. [http://localhost/MyStartingPage?calaction=ical](http://localhost/MyStartingPage?calaction=ical) works.</del> IT WORKS!

@@ -156,6 +156,7 @@ CategoryEventCalendar
 
 from MoinMoin import wikiutil, config, search, caching
 from MoinMoin.Page import Page
+from dateutil import parser
 # from icalendar import Calendar, Event
 import re, calendar, time, datetime
 import codecs, os, urllib, sha
@@ -3433,22 +3434,31 @@ def download_events_ical():
     def display(cal):
         return cal.to_ical().replace('\r\n', '\n').strip()
 
-    def make_todo(event):
-        todo = icalendar.Todo()
-        # todo['uid'] = make_uid(event)
-        # todo['DTSTAMP'] = formatcfgdatetime(event['startdate'], event['starttime'])
-        # todo['description'] = item['description']
-        # todo['url'] = 'issue.html_url'
-        # todo['created'] = issue.created_at
-        # todo['last-modified'] = issue.updated_at
-        # todo['status'] = 'NEEDS-ACTION'
-        # todo['organizer'] = make_reporter(issue)
-        todo.add('description', item['description'])
-        todo.add('labels', item['label'])
-        todo.add('title', item['title'])
-        todo.add('category', item['refer'])
-        cal.add_component(todo)
-        return todo
+    def make_dtstart(event):
+        try:
+            event['starttime']
+            print 'start_time NOT empty: ', event['starttime']
+        except NameError:
+            print 'start_time empty'
+            event['starttime'] = u'0000'
+        event_date_time = event['startdate']+event['starttime']
+        return parser.parse(event_date_time)
+
+    def make_event(event):
+        new_event = icalendar.Event()
+        new_event.add('summary', item['title'])
+        new_event['DTSTART'] = make_dtstart(event)
+        # new_event['DTEND'] = make_dtstart(event)
+        new_event.add('description', item['description'])
+        # new_event['uid'] = make_uid(event)
+        # new_event['DTSTAMP'] = formatcfgdatetime(event['startdate'], event['starttime'])
+        # new_event['url'] = 'issue.html_url'
+        # new_event['status'] = 'NEEDS-ACTION'
+        # new_event.add('labels', item['label'])
+        # new_event.add('title', item['title'])
+        # new_event.add('category', item['refer'])
+        cal.add_component(new_event)
+        return new_event
 
     """
     print 'EVENTS type: ', type(events)  # DICT
@@ -3458,13 +3468,9 @@ def download_events_ical():
     # print 'event values: ', events.values()
 
     for item in events.values():
-        make_todo(item)
+        make_event(item)
         # print '~~~ Item title: ', item['title']
 
-    """
-    for key in events:
-        print 'Key: ', key, 'events[key]: ', events[key] # THIS SORT OF WORKS
-    """
     html = display(cal)
     return formatter.rawHTML(html)
 
