@@ -76,6 +76,12 @@ item['startdate'] and item['starttime'] had be combined and converted to time an
 item['startdate'] and item['starttime'] are unicode objects, so they must be converted to the proper time and date format. Because this is a very commom operation, there are tools that have already been developed to help with this taks. In this case, the [dateutil module](https://dateutil.readthedocs.io/en/stable/) provides to the standard datetime Python module, allowing this operation to be performed.
 
 
+### cal_action
+Actions can send almost anything you like intead of a page.
+EventAggregator sets the content type and sends a different kind of resource.
+action=EventAggregatorSummary&...
+... => action providing in the iCalendar download. The browser will make a new request when the user follows the link and all the relevant information will need to be supplied again. 
+
 ### TODO:
 * <del>Figure out how to link calaction=ical on the bottom menu bar. [http://localhost/MyStartingPage?calaction=ical](http://localhost/MyStartingPage?calaction=ical) works.</del> IT WORKS!
 * Install the EventAggregator macro and make it work.

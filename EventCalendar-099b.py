@@ -3398,7 +3398,7 @@ def showsimpleeventcalendar(year, month):
 
 
 def download_events_ical():
-    """ Download future events data in icalendar format """
+    """ Download events' data in icalendar format """
     debug('Download events: icalendar')
 
     request = Globs.request
@@ -3409,7 +3409,6 @@ def download_events_ical():
     # write_resource(self.request)
     # return 1, None
     cal = icalendar.Calendar()
-    todo = icalendar.Event()
     """
     event['dtstart'] = '20050404T080000'
     """
@@ -3442,11 +3441,20 @@ def download_events_ical():
         event_date_time = event['startdate']+event['starttime']
         return parser.parse(event_date_time)
 
+    def make_date_time(event, arg_date, arg_time):
+        try:
+            arg_time
+        except NameError:
+            arg_time = u'0000'
+        event_date_time = arg_date+arg_time
+        return parser.parse(event_date_time)
+
     def make_event(event):
         new_event = icalendar.Event()
         new_event.add('summary', item['title'])
-        new_event['DTSTART'] = make_dtstart(event)
-        # new_event['DTEND'] = make_dtstart(event)
+        # new_event['DTSTART'] = make_dtstart(event)
+        new_event['DTSTART'] = make_date_time(event, event['startdate'], event['starttime'])
+        new_event['DTEND'] = make_date_time(event, event['enddate'], event['endtime'])
         new_event.add('description', item['description'])
         # new_event['uid'] = make_uid(event)
         # new_event['DTSTAMP'] = formatcfgdatetime(event['startdate'], event['starttime'])
