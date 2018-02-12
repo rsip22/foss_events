@@ -80,7 +80,20 @@ item['startdate'] and item['starttime'] are unicode objects, so they must be con
 Actions can send almost anything you like intead of a page.
 EventAggregator sets the content type and sends a different kind of resource.
 action=EventAggregatorSummary&...
-... => action providing in the iCalendar download. The browser will make a new request when the user follows the link and all the relevant information will need to be supplied again. 
+... => action providing in the iCalendar download. The browser will make a new request when the user follows the link and all the relevant information will need to be supplied again.
+
+### More on actions
+
+From my blog: "So maybe I will have to work a bit on this afterwards, to interact with the macro and customize the information to be displayed? I am not sure, I will have to look more into this."
+
+* [Analyzing actions](https://moinmo.in/ActionsAsViewsOperationsAndExports)
+
+> "Actions either produce some output based on page contents (navigational actions like searching) or implement functions that are not related to viewing a page (like deleting or renaming a page).
+>
+>Actions are tools that work on a page or the whole wiki, but unlike macros they do not add to the page content when viewing a page, rather they work on that page content."
+
+#### **Creating an action**
+- New class with the name of the action
 
 ### TODO:
 * <del>Figure out how to link calaction=ical on the bottom menu bar. [http://localhost/MyStartingPage?calaction=ical](http://localhost/MyStartingPage?calaction=ical) works.</del> IT WORKS!
@@ -89,4 +102,6 @@ action=EventAggregatorSummary&...
 * <del>Figure out how to allow the download to happen. (Check other macros' code, specially EventAggregator) => The 'download' or opening the ical file on the proper software *should happen* when the proper headers are set. But now I have to figure out how to do this, because EventCalendar doesn't seem to do that (set the headers) at any point. Does Moin Wiki? There should be a new global variable? A new function that returns the headers?</del> DONE! This helped: https://moinmo.in/MoinMoinBugs/EditorContentTypeHttpHeader
 * <del>Install icalendar system-wide to import it to the EventCalendar module.</del> Done.
 * <del>Parse the events data to set the output to proper icalendar format.</del> This is sort of done, but I still have to work on the event dates.
-* How to return the .ics file and not the whole wiki page when cal_action is called. => This I am stuck with, I am thinking that maybe the only way to make this work is to turn the function into a new macro itself. But how to keep that from happening if the data for this new macro will be derivated from EventCalendar?
+* <del>How to return the .ics file and not the whole wiki page when cal_action is called. => This I am stuck with, I am thinking that maybe the only way to make this work is to turn the function into a new macro itself. But how to keep that from happening if the data for this new macro will be derivated from EventCalendar?</del> A new action must be created.
+* 'How to create a moin action' -> create and document
+    - Accessing the action
