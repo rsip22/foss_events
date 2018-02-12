@@ -94,6 +94,8 @@ From my blog: "So maybe I will have to work a bit on this afterwards, to interac
 
 #### **Creating an action**
 - New class with the name of the action
+Note: the action name is the class name
+> A page is requested by an Action request. Then goes through Page and then Theme adds additional content before finaly an HTML page is sent to your browser. 
 
 ### TODO:
 * <del>Figure out how to link calaction=ical on the bottom menu bar. [http://localhost/MyStartingPage?calaction=ical](http://localhost/MyStartingPage?calaction=ical) works.</del> IT WORKS!

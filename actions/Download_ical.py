@@ -22,14 +22,14 @@ class Download_ical(ActionBase):
         self.request = request
         self.pagename = pagename
 
-    def _get_events_from_macro():
+    def _get_events_from_macro(self):
         pass
 
-    def _generate_ical():
+    def _generate_ical(self):
         request.mimetype = "text/calendar"
         pass
 
-    def _write_ics():
+    def _write_ics(self):
         pass
 
 

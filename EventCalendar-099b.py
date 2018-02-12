@@ -612,8 +612,8 @@ def showmenubar():
     mnu_weekview = u'<a href="%s?calaction=weekly%s" title="Weekly view">[Weekly]</a>' % (page_url, getquerystring(['caldate', 'numcal']) )
 
     # iCalendar download
-    mnu_ical = u'<a href="%s?action=Download_ical" title="icalendar download">[ical]</a>' % (page_url)
-    #  ?action=AttachFile&do=get&target=*.ics
+    mnu_ical = u'<a href="%s?action=AttachFile&do=get&target=events.ics" title="icalendar download">[ical]</a>' % (page_url)
+    #
 
     html = [
         u'\r\n',
