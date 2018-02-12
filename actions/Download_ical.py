@@ -21,13 +21,12 @@ class Download_ical(ActionBase):
         ActionBase.__init__(self, pagename, request)
         self.request = request
         self.pagename = pagename
-        logging.info('self.pagename')
-        logging.info(self.pagename)
 
     def _get_events_from_macro():
         pass
 
     def _generate_ical():
+        request.mimetype = "text/calendar"
         pass
 
     def _write_ics():
@@ -35,5 +34,5 @@ class Download_ical(ActionBase):
 
 
 def execute(pagename, request):
-    return Download_ical(pagename, request).render()
+    Download_ical(pagename, request).render()
     # Download_ical(pagename, request).send_raw()

@@ -613,6 +613,7 @@ def showmenubar():
 
     # iCalendar download
     mnu_ical = u'<a href="%s?action=Download_ical" title="icalendar download">[ical]</a>' % (page_url)
+    #  ?action=AttachFile&do=get&target=*.ics
 
     html = [
         u'\r\n',
