@@ -26,7 +26,8 @@ class Download_ical(ActionBase):
         pass
 
     def _generate_ical(self):
-        request.mimetype = "text/calendar"
+        self.request.mimetype = "text/calendar"
+        self.request.content_type = "text/calendar; charset=%s" % config.charset
         pass
 
     def _write_ics(self):
@@ -34,5 +35,5 @@ class Download_ical(ActionBase):
 
 
 def execute(pagename, request):
-    Download_ical(pagename, request).render()
-    # Download_ical(pagename, request).send_raw()
+    # Download_ical(pagename, request).render()
+    Download_ical(pagename, request).request.write('FUCK YEAH IT WORKS!!!')

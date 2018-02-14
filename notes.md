@@ -88,6 +88,8 @@ From my blog: "So maybe I will have to work a bit on this afterwards, to interac
 
 * [Analyzing actions](https://moinmo.in/ActionsAsViewsOperationsAndExports)
 
+> The action is what the MoinMoin code does with the client request (and the requested page).  Often, you write an action to extend MoinMoin to perform perform processing on a page (a page is given as the argument to the action), but any processing is allowed.
+>
 > "Actions either produce some output based on page contents (navigational actions like searching) or implement functions that are not related to viewing a page (like deleting or renaming a page).
 >
 >Actions are tools that work on a page or the whole wiki, but unlike macros they do not add to the page content when viewing a page, rather they work on that page content."
@@ -95,7 +97,26 @@ From my blog: "So maybe I will have to work a bit on this afterwards, to interac
 #### **Creating an action**
 - New class with the name of the action
 Note: the action name is the class name
-> A page is requested by an Action request. Then goes through Page and then Theme adds additional content before finaly an HTML page is sent to your browser. 
+
+> The request object is central and conects all the classes
+> A page is requested by an Action request. Then goes through Page and then Theme adds additional content before finaly an HTML page is sent to your browser.
+
+From the macro, call the action.
+Write a fuction that can be access both by the macro and the action. => But... how?
+What about the formatter?
+
+**Help on AllContext in module MoinMoin.web.contexts object:**
+
+class AllContext(HTTPContext, AuxilaryMixin)
+|  Methods inherited from HTTPContext:
+|  redirect(self, file=None)
+|      Redirect output to file, or restore saved output
+|  
+|  redirectedOutput(self, function, *args, **kw)
+|      Redirect output during function, return redirected output
+|  
+|  send_file(self, fileobj, bufsize=8192, do_flush=None)
+|      Send a file to the output stream.
 
 ### TODO:
 * <del>Figure out how to link calaction=ical on the bottom menu bar. [http://localhost/MyStartingPage?calaction=ical](http://localhost/MyStartingPage?calaction=ical) works.</del> IT WORKS!
