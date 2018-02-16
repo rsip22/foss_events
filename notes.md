@@ -101,9 +101,7 @@ Note: the action name is the class name
 > The request object is central and conects all the classes
 > A page is requested by an Action request. Then goes through Page and then Theme adds additional content before finaly an HTML page is sent to your browser.
 
-From the macro, call the action.
-Write a fuction that can be access both by the macro and the action. => But... how?
-What about the formatter?
+**print(help(request))**
 
 **Help on AllContext in module MoinMoin.web.contexts object:**
 
@@ -118,6 +116,95 @@ class AllContext(HTTPContext, AuxilaryMixin)
 |  send_file(self, fileobj, bufsize=8192, do_flush=None)
 |      Send a file to the output stream.
 
+become(self, cls)
+ |      Become another context, based on given class.
+ |      
+ |      @param cls: class to change to, must be a sister class
+ |      @rtype: boolean
+ |      @return: wether a class change took place
+
+ dir request:
+_
+__class__
+__delattr__
+__dict__
+__doc__
+__format__
+__getattr__
+__getattribute__
+__hash__
+__init__
+__module__
+__new__
+__reduce__
+__reduce_ex__
+__repr__
+__setattr__
+__sizeof__
+__str__
+__subclasshook__
+__weakref__
+_auth_redirected
+_fmt_hd_counters
+_login_messages
+_login_multistage
+_login_multistage_name
+_setuid_real_user
+_theme
+action
+become
+cacheable
+cfg
+clock
+content_lang
+content_type
+current_lang
+dicts
+disableHttpCaching
+environ
+finish
+formatter
+getBaseURL
+getPragma
+getQualifiedURL
+getScriptname
+getText
+groups
+html_formatter
+http_redirect
+http_referer
+http_user_agent
+initTheme
+isSpiderAgent
+lang
+makeForbidden
+mimetype
+mode_getpagelinks
+page
+pages
+parsePageLinks_running
+personalities
+pragma
+read
+redirect
+redirectedOutput
+request
+reset
+rev
+rootpage
+send_file
+session
+setContentLanguage
+setHttpHeader
+setPragma
+status
+status_code
+theme
+uid_generator
+user
+write
+writestack
+
 ### TODO:
 * <del>Figure out how to link calaction=ical on the bottom menu bar. [http://localhost/MyStartingPage?calaction=ical](http://localhost/MyStartingPage?calaction=ical) works.</del> IT WORKS!
 * Install the EventAggregator macro and make it work.
@@ -128,3 +215,5 @@ class AllContext(HTTPContext, AuxilaryMixin)
 * <del>How to return the .ics file and not the whole wiki page when cal_action is called. => This I am stuck with, I am thinking that maybe the only way to make this work is to turn the function into a new macro itself. But how to keep that from happening if the data for this new macro will be derivated from EventCalendar?</del> A new action must be created.
 * 'How to create a moin action' -> create and document
     - Accessing the action
+* <del>From the macro, call the action.</del> -> DONE
+* Write a fuction that can be access both by the macro and the action. But... how? What about the formatter? -> The issue with the formatter is sort of resolved.

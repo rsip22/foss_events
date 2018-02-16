@@ -153,6 +153,8 @@ CategoryEventCalendar
 """
 from MoinMoin import wikiutil, config, search, caching
 from MoinMoin.Page import Page
+# from MoinMoin.action.Download_ical import f
+from . import Download_ical
 # from icalendar import Calendar, Event
 from dateutil import parser
 from datetime import datetime
@@ -306,7 +308,7 @@ def execute(macro, args):
         html_result = showweeklycalendar()
 
     if cal_action == 'ical':
-        html_result = download_events_ical()
+        download_events_ical()
 
     # format output
     html.append( html_result )
@@ -613,7 +615,8 @@ def showmenubar():
     mnu_weekview = u'<a href="%s?calaction=weekly%s" title="Weekly view">[Weekly]</a>' % (page_url, getquerystring(['caldate', 'numcal']) )
 
     # iCalendar download
-    mnu_ical = u'<a href="%s?calaction=ical&action=Download_ical" title="icalendar download">[ical]</a>' % (page_url)
+    mnu_ical = u'<a href="%s?calaction=ical" title="icalendar download">[ical]</a>' % (page_url)
+    # mnu_ical = u'<a href="%s?calaction=ical&action=Download_ical" title="icalendar download">[ical]</a>' % (page_url)
     # mnu_ical = u'<a href="%s/events?calaction=ical&action=AttachFile&do=get[&mimetype=type]" title="icalendar download">[ical]</a>' % (page_url)
     # mnu_ical = u'<a href="%s?action=AttachFile&do=get&target=events.ics" title="icalendar download">[ical]</a>' % (page_url)
 
@@ -1010,7 +1013,9 @@ def download_events_ical():
     # request = self.request
     request.content_type = "text/calendar; charset=%s" % config.charset
 
-    # print(help(request))
+    # print help('redirect:', request.redirect(file='ical.ics'))
+    # print help('redirectED', request.redirectedOutput())
+    # redirectedOutput(self, function, *args, **kw)
 
     # print('getBaseURL', request.getBaseURL())
     # print("send_file", request.send_file(fileobj='events.ics', bufsize=8192, do_flush=None))
@@ -1089,7 +1094,15 @@ def download_events_ical():
         # print '~~~ Item title: ', item['title']
 
     html = display(cal)
-    return display(cal)
+    # directory = tempfile.mkdtemp()
+    # ical_file = open(os.path.join(directory, 'events.ics', 'wb'))
+    # ical_file.write(cal.to_ical())
+    # ical_file.close()
+    # request.redirect(file='ical.ics')
+    # redirect(self, file=None)
+
+    test = Download_ical(pagename, request).f()
+    return test, display(cal)
 
 
 def showsimplecalendar():
