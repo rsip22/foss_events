@@ -153,8 +153,10 @@ CategoryEventCalendar
 """
 from MoinMoin import wikiutil, config, search, caching
 from MoinMoin.Page import Page
-# from MoinMoin.action.Download_ical import f
-from . import Download_ical
+# from MoinMoin.actions.Download_ical import f
+# from . import Download_ical
+# from plugins import Download_ical
+from actions import Download_ical
 # from icalendar import Calendar, Event
 from dateutil import parser
 from datetime import datetime
