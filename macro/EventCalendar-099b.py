@@ -153,10 +153,10 @@ CategoryEventCalendar
 """
 from MoinMoin import wikiutil, config, search, caching
 from MoinMoin.Page import Page
-# from MoinMoin.actions.Download_ical import f
+from MoinMoin.action import Download_ical
 # from . import Download_ical
 # from plugins import Download_ical
-from actions import Download_ical
+# from actions import Download_ical
 # from icalendar import Calendar, Event
 from dateutil import parser
 from datetime import datetime
@@ -1103,7 +1103,8 @@ def download_events_ical():
     # request.redirect(file='ical.ics')
     # redirect(self, file=None)
 
-    test = Download_ical(pagename, request).f()
+    # test = Download_ical(pagename, request).f()
+    return display(cal)
     return test, display(cal)
 
 
