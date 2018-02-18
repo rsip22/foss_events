@@ -154,15 +154,13 @@ CategoryEventCalendar
 from MoinMoin import wikiutil, config, search, caching
 from MoinMoin.Page import Page
 from MoinMoin.action import Download_ical
-# from . import Download_ical
-# from plugins import Download_ical
-# from actions import Download_ical
-# from icalendar import Calendar, Event
+from MoinMoin.action import AttachFile
 from dateutil import parser
 from datetime import datetime
 import pytz
 import icalendar
 import re, calendar, time, datetime
+import tempfile
 import codecs, os, urllib, sha
 import json
 from MoinMoin import log
@@ -1013,7 +1011,6 @@ def download_events_ical():
     request = Globs.request
     formatter = None
     # request = self.request
-    request.content_type = "text/calendar; charset=%s" % config.charset
 
     # print help('redirect:', request.redirect(file='ical.ics'))
     # print help('redirectED', request.redirectedOutput())
@@ -1068,10 +1065,8 @@ def download_events_ical():
     def make_event(event):
         new_event = icalendar.Event()
         new_event.add('summary', item['title'])
-        new_event['DTSTART'] = make_date_time(event,
-                                              'startdate',
-                                              'starttime')
-        new_event['DTEND'] = make_date_time(event, 'enddate', 'endtime')
+        new_event.add('DTSTART', make_date_time(event, 'startdate', 'starttime'))
+        new_event.add('DTEND', make_date_time(event, 'enddate', 'endtime'))
         new_event.add('description', item['description'])
         # new_event['uid'] = make_uid(event)
         # new_event['DTSTAMP'] = formatcfgdatetime(event['startdate'], event['starttime'])
@@ -1095,18 +1090,33 @@ def download_events_ical():
         make_event(item)
         # print '~~~ Item title: ', item['title']
 
+    # request.content_type = "text/calendar; charset=%s" % config.charset
     html = display(cal)
-    # directory = tempfile.mkdtemp()
-    # ical_file = open(os.path.join(directory, 'events.ics', 'wb'))
-    # ical_file.write(cal.to_ical())
-    # ical_file.close()
+
+    pagename = Globs.pagename
+
+    attach_dir = AttachFile.getAttachDir(request, pagename)
+    new_ics_file = AttachFile.add_attachment(request, pagename, 'events.ics', display(cal), overwrite=1)
     # request.redirect(file='ical.ics')
     # redirect(self, file=None)
 
-    # test = Download_ical(pagename, request).f()
-    return display(cal)
-    return test, display(cal)
+    # test = Download_ical.Download_ical(pagename, request).f()
 
+    # request.write('f:', test) # This works, but ends on up the page
+
+    # request.redirect(file='ical.ics')
+    # AttributeError: 'str' object has no attribute 'write'
+
+    # redirectedOutput(function, *args, **kw)
+    # request.redirectedOutput(Download_ical.Download_ical(pagename, request).f())
+    # TypeError: 'unicode' object is not callable
+    # request.redirectedOutput(Download_ical.Download_ical().f(), pagename, request)
+    # TypeError: __init__() takes exactly 3 arguments (1 given)
+
+
+    return display(cal)
+    # return request.redirect(test, file='ical.ics')
+    # return Download_ical.Download_ical(pagename, request).request.write('FUCK YEAH IT REALLY WORKS!!!')
 
 def showsimplecalendar():
 

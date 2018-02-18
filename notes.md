@@ -103,6 +103,9 @@ Note: the action name is the class name
 
 **print(help(request))**
 
+### Import ics
+7 items failed to import. The last error was: [Exception... "[JavaScript Error: "item.startDate is null" {file: "file:///usr/lib/lightning/components/calStorageCalendar.js" line: 2026}]'[JavaScript Error: "item.startDate is null" {file: "file:///usr/lib/lightning/components/calStorageCalendar.js" line: 2026}]' when calling method: [calICalendar::addItem]"  nsresult: "0x80570021 (NS_ERROR_XPC_JAVASCRIPT_ERROR_WITH_DETAILS)"  location: "JS frame :: chrome://calendar/content/import-export.js :: putItemsIntoCal :: line 188"  data: yes]
+
 **Help on AllContext in module MoinMoin.web.contexts object:**
 
 class AllContext(HTTPContext, AuxilaryMixin)
@@ -123,8 +126,7 @@ become(self, cls)
  |      @rtype: boolean
  |      @return: wether a class change took place
 
- dir request:
-_
+dir request:
 __class__
 __delattr__
 __dict__
@@ -204,6 +206,7 @@ uid_generator
 user
 write
 writestack
+
 
 ### TODO:
 * <del>Figure out how to link calaction=ical on the bottom menu bar. [http://localhost/MyStartingPage?calaction=ical](http://localhost/MyStartingPage?calaction=ical) works.</del> IT WORKS!
