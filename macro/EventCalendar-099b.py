@@ -615,7 +615,7 @@ def showmenubar():
     mnu_weekview = u'<a href="%s?calaction=weekly%s" title="Weekly view">[Weekly]</a>' % (page_url, getquerystring(['caldate', 'numcal']) )
 
     # iCalendar download
-    mnu_ical = u'<a href="%s/?calaction=%s&action=AttachFile&do=get&target=events.ics" title="icalendar download">[ical]</a>' % (page_url, cal_action)
+    mnu_ical = u'<a href="%s/?calaction=ical&action=AttachFile&do=get&target=events.ics" title="icalendar download">[ical]</a>' % (page_url)
 
     html = [
         u'\r\n',
@@ -1065,7 +1065,7 @@ def download_events_ical():
         # eventitem['recur_freq'] = e_recur_freq
         # eventitem['recur_type'] = e_recur_type
         # eventitem['recur_until'] = e_recur_until
-
+        """
         if item['recur_freq']:
             if item['recur_freq'] == -1:
                 recur_desc = 'last %s' % item['recur_type']
@@ -1082,14 +1082,19 @@ def download_events_ical():
                  recur_desc = '%s until %s' % (recur_desc, formatcfgdatetime(item['recur_until']))
                  print "item['recur_freq'] 3" + str(item['recur_until'])
                  # print "item['recur_until'] "+ recur_desc
+            """
 
-    # request.content_type = "text/calendar; charset=%s" % config.charset
+    request.content_type = "text/calendar; charset=%s" % config.charset
     html = display(cal)
 
     pagename = Globs.pagename
 
     attach_dir = AttachFile.getAttachDir(request, pagename)
-    new_ics_file = AttachFile.add_attachment(request, pagename, 'events.ics', display(cal), overwrite=1)
+    new_ics_file = AttachFile.add_attachment(request,
+                                             pagename,
+                                             'events.ics',
+                                             display(cal),
+                                             overwrite=1)
 
     return display(cal)
 

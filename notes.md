@@ -23,11 +23,7 @@ Info for one event, from **listshow_event(event)**:
 From **showReferPageParsed**:
 refer = event['refer']
 targettext = event[targettext]
-startdate = event['startdate']
-enddate = event['enddate']
 description = event['description']
-starttime = event['starttime']
-endtime = event['endtime']
 hid = event['hid']
 
 #### From EventAggregator:
@@ -105,6 +101,47 @@ Note: the action name is the class name
 
 ### Import ics
 7 items failed to import. The last error was: [Exception... "[JavaScript Error: "item.startDate is null" {file: "file:///usr/lib/lightning/components/calStorageCalendar.js" line: 2026}]'[JavaScript Error: "item.startDate is null" {file: "file:///usr/lib/lightning/components/calStorageCalendar.js" line: 2026}]' when calling method: [calICalendar::addItem]"  nsresult: "0x80570021 (NS_ERROR_XPC_JAVASCRIPT_ERROR_WITH_DETAILS)"  location: "JS frame :: chrome://calendar/content/import-export.js :: putItemsIntoCal :: line 188"  data: yes]
+
+* default_bgcolor, default_description: default values of bgcolor and description in the page if unavailable. optional
+* label_def: label definition with name, bgcolor. optional
+
+* title: event title. required
+    * should be enclosed with heading marker ('='), Title cannot be omitted.
+
+* startdate: date of start. required
+    * should be in date format or date format
+
+* starttime: time of start. optional
+    * should be in time format
+
+* enddate: date of end. optional
+    * should be in date format or date format. If omitted, it will be assigned equal to <startdate>.
+
+* endtime: time of end. optional
+    * should be in time format. Both of start|end Time can be omitted but not either of them.
+
+* description: description of the event. optional
+    * any text with no markup. should be in a line.
+
+* bgcolor: custom background color of the event in monthly view. optional
+    * e.g., #abcdef
+
+* recur: recurrence information of the event. optional
+    * recur_freq: how many intervals, digit or 'last' for weekday, required
+    * recur_type: [day|week|weekday|month|year], required
+        * day: every [recur_freq] days
+        * week: every [recur_freq] weeks
+        * weekday: on the same weekday of [recur_freq]-th week of the month. or 'last weekday'
+        * month: on the same day of [recur_freq]-th month
+        * year: on the same day of [recur_freq]-th year
+    * recur_until: recurred until when, date format, optional
+
+    * e.g., 10 day, 2 week until 2006-06-31, 3 weekday, 6 month until 2007-12-31, 1 year
+
+* label: custom label for specific name, bgcolor. optional
+
+* The order of the fields after an event title does not matter.
+* Priority of bgcolor: bgcolor > default_bgcolor > label_bgcolor
 
 **Help on AllContext in module MoinMoin.web.contexts object:**
 
