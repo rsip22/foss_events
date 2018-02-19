@@ -615,10 +615,7 @@ def showmenubar():
     mnu_weekview = u'<a href="%s?calaction=weekly%s" title="Weekly view">[Weekly]</a>' % (page_url, getquerystring(['caldate', 'numcal']) )
 
     # iCalendar download
-    mnu_ical = u'<a href="%s?calaction=ical" title="icalendar download">[ical]</a>' % (page_url)
-    # mnu_ical = u'<a href="%s?calaction=ical&action=Download_ical" title="icalendar download">[ical]</a>' % (page_url)
-    # mnu_ical = u'<a href="%s/events?calaction=ical&action=AttachFile&do=get[&mimetype=type]" title="icalendar download">[ical]</a>' % (page_url)
-    # mnu_ical = u'<a href="%s?action=AttachFile&do=get&target=events.ics" title="icalendar download">[ical]</a>' % (page_url)
+    mnu_ical = u'<a href="%s/?calaction=%s&action=AttachFile&do=get&target=events.ics" title="icalendar download">[ical]</a>' % (page_url, cal_action)
 
     html = [
         u'\r\n',
@@ -1010,24 +1007,6 @@ def download_events_ical():
 
     request = Globs.request
     formatter = None
-    # request = self.request
-
-    # print help('redirect:', request.redirect(file='ical.ics'))
-    # print help('redirectED', request.redirectedOutput())
-    # redirectedOutput(self, function, *args, **kw)
-
-    # print('getBaseURL', request.getBaseURL())
-    # print("send_file", request.send_file(fileobj='events.ics', bufsize=8192, do_flush=None))
-    # print('write(self, *data)', request.write('TEST DATA, Write to output stream.'))
-    # print('Data descriptors inherited from HTTPContext:')
-    # print('Data descriptors inherited from BaseContext: action, formatter, page')
-
-    # write_resource(self.request)
-    # return 1, None
-
-    """
-    event['dtstart'] = '20050404T080000'
-    """
 
     # read all the events
     events, cal_events, labels = loadEvents()
@@ -1035,16 +1014,6 @@ def download_events_ical():
     # sort events
     sorted_eventids = events.keys()
     sorted_eventids.sort(comp_list_events)
-
-    # eventitem['startdate'] = e_start_date
-    # eventitem['starttime'] = e_start_time
-    # eventitem['enddate'] = e_end_date
-    # eventitem['endtime'] = e_end_time
-    # eventitem['refer'] = referpage
-    # eventitem['bgcolor'] = e_bgcolor
-    # eventitem['recur_freq'] = e_recur_freq
-    # eventitem['recur_type'] = e_recur_type
-    # eventitem['recur_until'] = e_recur_until
 
     cal = icalendar.Calendar()
     cal.add('prodid', '-//moinmo.in//EventCalendar/')
@@ -1065,9 +1034,19 @@ def download_events_ical():
     def make_event(event):
         new_event = icalendar.Event()
         new_event.add('summary', item['title'])
-        new_event.add('DTSTART', make_date_time(event, 'startdate', 'starttime'))
+        new_event.add('DTSTART', make_date_time(event,
+                                                'startdate',
+                                                'starttime'))
         new_event.add('DTEND', make_date_time(event, 'enddate', 'endtime'))
         new_event.add('description', item['description'])
+        if item['label']:
+            new_event.add('labels', item['label'])
+        if item['refer']:
+            new_event.add('url', item['refer'])  # This doesn't give an URL, just the name of the page
+        # eventitem['bgcolor'] = e_bgcolor
+        # eventitem['recur_freq'] = e_recur_freq
+        # eventitem['recur_type'] = e_recur_type
+        # eventitem['recur_until'] = e_recur_until
         # new_event['uid'] = make_uid(event)
         # new_event['DTSTAMP'] = formatcfgdatetime(event['startdate'], event['starttime'])
         # new_event['url'] = 'issue.html_url'
@@ -1079,16 +1058,30 @@ def download_events_ical():
         cal.add_component(new_event)
         return new_event
 
-    """
-    print 'EVENTS type: ', type(events)  # DICT
-    print 'CAL_EVENTS type: ', type(cal_events)  # DICT
-    print 'LABELS type: ', type(labels)  # DICT
-    """
-    # print 'event values: ', events.values()
-
     for item in events.values():
         make_event(item)
         # print '~~~ Item title: ', item['title']
+
+        # eventitem['recur_freq'] = e_recur_freq
+        # eventitem['recur_type'] = e_recur_type
+        # eventitem['recur_until'] = e_recur_until
+
+        if item['recur_freq']:
+            if item['recur_freq'] == -1:
+                recur_desc = 'last %s' % item['recur_type']
+                print "item['recur_freq'] 1" + str(item['recur_freq'])
+                print "item['recur_type'] 1" + str(item['recur_type'])
+                # print "item['recur_freq'] == -1 " + recur_desc
+            else:
+                recur_desc = 'every %d %s' % (item['recur_freq'], item['recur_type'])
+                print "item['recur_freq'] 2" + str(item['recur_freq'])
+                print "item['recur_type'] 1" + str(item['recur_type'])
+                # print 'ELSE: '+ recur_desc
+
+            if item['recur_until']:
+                 recur_desc = '%s until %s' % (recur_desc, formatcfgdatetime(item['recur_until']))
+                 print "item['recur_freq'] 3" + str(item['recur_until'])
+                 # print "item['recur_until'] "+ recur_desc
 
     # request.content_type = "text/calendar; charset=%s" % config.charset
     html = display(cal)
@@ -1097,26 +1090,9 @@ def download_events_ical():
 
     attach_dir = AttachFile.getAttachDir(request, pagename)
     new_ics_file = AttachFile.add_attachment(request, pagename, 'events.ics', display(cal), overwrite=1)
-    # request.redirect(file='ical.ics')
-    # redirect(self, file=None)
-
-    # test = Download_ical.Download_ical(pagename, request).f()
-
-    # request.write('f:', test) # This works, but ends on up the page
-
-    # request.redirect(file='ical.ics')
-    # AttributeError: 'str' object has no attribute 'write'
-
-    # redirectedOutput(function, *args, **kw)
-    # request.redirectedOutput(Download_ical.Download_ical(pagename, request).f())
-    # TypeError: 'unicode' object is not callable
-    # request.redirectedOutput(Download_ical.Download_ical().f(), pagename, request)
-    # TypeError: __init__() takes exactly 3 arguments (1 given)
-
 
     return display(cal)
-    # return request.redirect(test, file='ical.ics')
-    # return Download_ical.Download_ical(pagename, request).request.write('FUCK YEAH IT REALLY WORKS!!!')
+
 
 def showsimplecalendar():
 
