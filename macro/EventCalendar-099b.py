@@ -153,7 +153,7 @@ CategoryEventCalendar
 """
 from MoinMoin import wikiutil, config, search, caching
 from MoinMoin.Page import Page
-from MoinMoin.action import Download_ical
+# from MoinMoin.action import Download_ical
 from MoinMoin.action import AttachFile
 from dateutil import parser
 from datetime import datetime
@@ -1090,12 +1090,18 @@ def download_events_ical():
     pagename = Globs.pagename
 
     attach_dir = AttachFile.getAttachDir(request, pagename)
-    new_ics_file = AttachFile.add_attachment(request,
-                                             pagename,
-                                             'events.ics',
-                                             display(cal),
-                                             overwrite=1)
-
+    if AttachFile.AttachmentAlreadyExists:
+        new_ics_file = AttachFile.add_attachment(request,
+                                                 pagename,
+                                                 'events.ics',
+                                                 display(cal),
+                                                 overwrite=1)
+    else:
+        new_ics_file = AttachFile.add_attachment(request,
+                                                 pagename,
+                                                 'events.ics',
+                                                 display(cal),
+                                                 overwrite=0)
     return display(cal)
 
 
