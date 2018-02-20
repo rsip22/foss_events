@@ -153,18 +153,12 @@ CategoryEventCalendar
 """
 from MoinMoin import wikiutil, config, search, caching
 from MoinMoin.Page import Page
-# from MoinMoin.action import Download_ical
 from MoinMoin.action import AttachFile
 from dateutil import parser
-from datetime import datetime
-import pytz
-import icalendar
 import re, calendar, time, datetime
-import tempfile
 import codecs, os, urllib, sha
-import json
-from MoinMoin import log
-logging = log.getLogger(__name__)
+import tempfile
+import icalendar
 
 try:
     import cPickle as pickle
@@ -249,13 +243,14 @@ def execute(macro, args):
                       'simple',
                       'upcoming',
                       'daily',
-                      'weekly',
-                      'ical']
+                      'weekly']
     default_action = Params.firstview
 
     # Internal variables
     cal_action = ''
     form_vals = {}
+
+    create_ical_from_events()
 
     # PROCESSING ARGUEMENTS ----------------------------------------
     if args:
@@ -308,7 +303,7 @@ def execute(macro, args):
         html_result = showweeklycalendar()
 
     if cal_action == 'ical':
-        download_events_ical()
+        create_ical_from_events()
 
     # format output
     html.append( html_result )
@@ -615,7 +610,8 @@ def showmenubar():
     mnu_weekview = u'<a href="%s?calaction=weekly%s" title="Weekly view">[Weekly]</a>' % (page_url, getquerystring(['caldate', 'numcal']) )
 
     # iCalendar download
-    mnu_ical = u'<a href="%s/?calaction=ical&action=AttachFile&do=get&target=events.ics" title="icalendar download">[ical]</a>' % (page_url)
+    # mnu_ical = u'<a href="%s/?calaction=ical&action=AttachFile&do=get&target=events.ics" title="icalendar download">[ical]</a>' % (page_url)
+    mnu_ical = u'<a href="%s/?action=AttachFile&do=get&target=events.ics" title="icalendar download">[ical]</a>' % (page_url)
 
     html = [
         u'\r\n',
@@ -1001,9 +997,9 @@ def showweeklycalendar():
     return u''.join(html)
 
 
-def download_events_ical():
-    """ Download events' data in icalendar format """
-    debug('Download events: icalendar')
+def create_ical_from_events():
+    """ Creates icalendar file with events' data """
+    debug('Create icalendar file from events')
 
     request = Globs.request
     formatter = None
@@ -1039,21 +1035,18 @@ def download_events_ical():
                                                 'starttime'))
         new_event.add('DTEND', make_date_time(event, 'enddate', 'endtime'))
         new_event.add('description', item['description'])
+        new_event.add('category', item['refer'])
         if item['label']:
             new_event.add('labels', item['label'])
         if item['refer']:
-            new_event.add('url', item['refer'])  # This doesn't give an URL, just the name of the page
+            new_event.add('url', request.getQualifiedURL()+getEventURL(item['refer'], item['title'], item['hid']))  # This doesn't give an URL, just the name of the page
         # eventitem['bgcolor'] = e_bgcolor
         # eventitem['recur_freq'] = e_recur_freq
         # eventitem['recur_type'] = e_recur_type
         # eventitem['recur_until'] = e_recur_until
         # new_event['uid'] = make_uid(event)
         # new_event['DTSTAMP'] = formatcfgdatetime(event['startdate'], event['starttime'])
-        # new_event['url'] = 'issue.html_url'
         # new_event['status'] = 'NEEDS-ACTION'
-        # new_event.add('labels', item['label'])
-        # new_event.add('title', item['title'])
-        # new_event.add('category', item['refer'])
         # new_event.add('dtstamp', datetime.datetime(2018,1,24,0,10,0,tzinfo=pytz.utc))
         cal.add_component(new_event)
         return new_event
@@ -1084,25 +1077,18 @@ def download_events_ical():
                  # print "item['recur_until'] "+ recur_desc
             """
 
-    request.content_type = "text/calendar; charset=%s" % config.charset
-    html = display(cal)
-
     pagename = Globs.pagename
 
+    attach_file = display(cal)
+
     attach_dir = AttachFile.getAttachDir(request, pagename)
-    if AttachFile.AttachmentAlreadyExists:
-        new_ics_file = AttachFile.add_attachment(request,
-                                                 pagename,
-                                                 'events.ics',
-                                                 display(cal),
-                                                 overwrite=1)
-    else:
-        new_ics_file = AttachFile.add_attachment(request,
-                                                 pagename,
-                                                 'events.ics',
-                                                 display(cal),
-                                                 overwrite=0)
-    return display(cal)
+    new_ics_file = AttachFile.add_attachment(request,
+                                             pagename,
+                                             'events.ics',
+                                             display(cal),
+                                             overwrite=1)
+
+    pass
 
 
 def showsimplecalendar():
@@ -4340,6 +4326,17 @@ def getNumericalMonth(strMonth):
             return index
 
     return 0
+
+
+def getEventURL(refer, title='', hid=''):
+    request = Globs.request
+
+    refer_url = '%s/%s' % (request.getScriptname(), wikiutil.quoteWikinameURL(refer))
+
+    if hid:
+        refer_url += '#%s' % hid
+
+    return refer_url
 
 
 def getReferLink(refer, title='', hid=''):
