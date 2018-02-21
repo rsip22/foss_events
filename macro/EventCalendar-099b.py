@@ -1017,7 +1017,6 @@ def create_ical_from_events():
 
     def display(cal):
         return cal.to_ical()
-        # return cal.to_ical().replace('\r\n', '\n').strip()
 
     def make_date_time(event, arg_date, arg_time):
         try:
@@ -1039,25 +1038,11 @@ def create_ical_from_events():
         if item['label']:
             new_event.add('labels', item['label'])
         if item['refer']:
-            new_event.add('url', request.getQualifiedURL()+getEventURL(item['refer'], item['title'], item['hid']))  # This doesn't give an URL, just the name of the page
-        # eventitem['bgcolor'] = e_bgcolor
-        # eventitem['recur_freq'] = e_recur_freq
-        # eventitem['recur_type'] = e_recur_type
-        # eventitem['recur_until'] = e_recur_until
-        # new_event['uid'] = make_uid(event)
-        # new_event['DTSTAMP'] = formatcfgdatetime(event['startdate'], event['starttime'])
-        # new_event['status'] = 'NEEDS-ACTION'
-        # new_event.add('dtstamp', datetime.datetime(2018,1,24,0,10,0,tzinfo=pytz.utc))
-        cal.add_component(new_event)
-        return new_event
+            new_event.add('url',
+                          request.getQualifiedURL()+getEventURL(item['refer'],
+                                                                item['title'],
+                                                                item['hid']))
 
-    for item in events.values():
-        make_event(item)
-        # print '~~~ Item title: ', item['title']
-
-        # eventitem['recur_freq'] = e_recur_freq
-        # eventitem['recur_type'] = e_recur_type
-        # eventitem['recur_until'] = e_recur_until
         """
         if item['recur_freq']:
             if item['recur_freq'] == -1:
@@ -1072,10 +1057,31 @@ def create_ical_from_events():
                 # print 'ELSE: '+ recur_desc
 
             if item['recur_until']:
-                 recur_desc = '%s until %s' % (recur_desc, formatcfgdatetime(item['recur_until']))
-                 print "item['recur_freq'] 3" + str(item['recur_until'])
-                 # print "item['recur_until'] "+ recur_desc
-            """
+                recur_until = str(item['recur_until'])
+                new_event.add('RECUR', parameters={'UNTIL': str(item['recur_until']}))
+                recur_desc = '%s until %s' % (recur_desc, formatcfgdatetime(item['recur_until']))
+                # print "item['recur_until']" + str(item['recur_until'])
+                # print "item['recur_until'] "+ recur_desc
+
+        # eventitem['bgcolor'] = e_bgcolor
+        # eventitem['recur_freq'] = e_recur_freq
+        # eventitem['recur_type'] = e_recur_type
+        # eventitem['recur_until'] = e_recur_until
+        # new_event['uid'] = make_uid(event)
+        # new_event['DTSTAMP'] = formatcfgdatetime(event['startdate'], event['starttime'])
+        # new_event['status'] = 'NEEDS-ACTION'
+        # new_event.add('dtstamp', datetime.datetime(2018,1,24,0,10,0,tzinfo=pytz.utc))
+        """
+        cal.add_component(new_event)
+        return new_event
+
+    for item in events.values():
+        make_event(item)
+        # print '~~~ Item title: ', item['title']
+
+        # eventitem['recur_freq'] = e_recur_freq
+        # eventitem['recur_type'] = e_recur_type
+        # eventitem['recur_until'] = e_recur_until
 
     pagename = Globs.pagename
 
