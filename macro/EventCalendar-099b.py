@@ -155,6 +155,7 @@ from MoinMoin import wikiutil, config, search, caching
 from MoinMoin.Page import Page
 from MoinMoin.action import AttachFile
 from dateutil import parser
+from dateutil.rrule import rrule, MONTHLY
 import re, calendar, time, datetime
 import codecs, os, urllib, sha
 import tempfile
@@ -1043,22 +1044,38 @@ def create_ical_from_events():
                                                                 item['title'],
                                                                 item['hid']))
 
-        """
         if item['recur_freq']:
             if item['recur_freq'] == -1:
                 recur_desc = 'last %s' % item['recur_type']
-                print "item['recur_freq'] 1" + str(item['recur_freq'])
-                print "item['recur_type'] 1" + str(item['recur_type'])
+                print "item['recur_freq'] A " + str(item['recur_freq'])
+                print "item['recur_type'] A " + str(item['recur_type'])
                 # print "item['recur_freq'] == -1 " + recur_desc
             else:
                 recur_desc = 'every %d %s' % (item['recur_freq'], item['recur_type'])
-                print "item['recur_freq'] 2" + str(item['recur_freq'])
-                print "item['recur_type'] 1" + str(item['recur_type'])
+                rrule_count = item['recur_freq']
+                rrule_freq = str(item['recur_type'])
+
+                new_event.add('RECUR',
+                              rrule(freq=rrule_freq,
+                                    count=rrule_count,
+                                    dtstart=make_date_time(event,
+                                                           'startdate',
+                                                           'starttime')))
+                """
+                rrule(freq=rrule_freq, count=rrule_count, dtstart=start_date)
+                new_event.add('RECUR', parameters={'FREQ': item['recur_type'],
+                                                   'COUNT': int(item['recur_freq']),
+                                                   'UNTIL': str(item['recur_until']}))
+                """
+                print "item['recur_freq'] B " + str(item['recur_freq'])
+                print type(item['recur_freq'])
+                print "item['recur_type'] B " + str(item['recur_type'])
+                print type(item['recur_type'])
                 # print 'ELSE: '+ recur_desc
 
             if item['recur_until']:
                 recur_until = str(item['recur_until'])
-                new_event.add('RECUR', parameters={'UNTIL': str(item['recur_until']}))
+                # new_event.add('RECUR', parameters={'UNTIL': str(item['recur_until']}))
                 recur_desc = '%s until %s' % (recur_desc, formatcfgdatetime(item['recur_until']))
                 # print "item['recur_until']" + str(item['recur_until'])
                 # print "item['recur_until'] "+ recur_desc
@@ -1071,7 +1088,7 @@ def create_ical_from_events():
         # new_event['DTSTAMP'] = formatcfgdatetime(event['startdate'], event['starttime'])
         # new_event['status'] = 'NEEDS-ACTION'
         # new_event.add('dtstamp', datetime.datetime(2018,1,24,0,10,0,tzinfo=pytz.utc))
-        """
+
         cal.add_component(new_event)
         return new_event
 
