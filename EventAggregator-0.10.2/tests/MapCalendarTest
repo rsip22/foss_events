@@ -1,3 +1,0 @@
-A test of events in CategoryEvents on a map of Europe for February 2013:
-
-<<EventAggregator(CategoryEvents,mode=map,map=europe,start=2013-02,end=2013-02)>>

@@ -1,0 +1,5 @@
+This repo contains code for MoinMoin EventCalendar macro with the new feature to export the event data to icalendar.
+
+A HOWTO may be found on Debian wiki: [https://wiki.debian.org/SocialEventAndConferenceCalendars/MoinMoinEventCalendar](https://wiki.debian.org/SocialEventAndConferenceCalendars/MoinMoinEventCalendar)
+
+Work in progress, I still haven't figured out the recurrence rule. :(

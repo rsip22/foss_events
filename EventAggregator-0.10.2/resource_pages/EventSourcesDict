@@ -1,9 +1,0 @@
-The following event sources are defined for !EventAggregator:
-
- GriCal:: http://grical.org/s/?query=%23free-software+{start}+{end}&view=ical ical
-
-To add a new source, extend the above definition list, putting the name of the source (to be used with the !EventAggregator macro) as the definition title, and putting the source's URL and the format of the data provided by the source, separated by whitespace, as the definition body.
-
-Currently, `ical` is the only supported format, referring to iCalendar ([[http://tools.ietf.org/html/rfc2445|RFC 2445]] and [[http://tools.ietf.org/html/rfc5545|RFC 5545]]).
-
-Events from sources for a particular view are cached in !EventAggregator for a period of time. The default period of 300 seconds (5 minutes) can be changed by defining the `event_aggregator_max_cache_age` in the [[HelpOnConfiguration|Wiki configuration]], specifying a number of seconds to be used for the maximum age of a cache entry.

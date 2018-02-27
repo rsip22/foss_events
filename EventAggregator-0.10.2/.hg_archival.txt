@@ -1,4 +1,0 @@
-repo: c1127ca770b72a3b5774db94990c39150041d4ee
-node: 6a06d8b82f3199db2fa9b601f9d303479939ced9
-branch: default
-tag: rel-0-10-2
